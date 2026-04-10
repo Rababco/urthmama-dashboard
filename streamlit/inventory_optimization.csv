@@ -1,0 +1,165 @@
+Product,ABC_Class,Total_Revenue,Avg_Monthly_Demand,Std_Monthly_Demand,Demand_Variability,Safety_Stock,Reorder_Point,Recommended_Monthly_Stock
+Omiebox Bentobox Pink Berry,A,28882.67,13.297297297297296,16.399296842759355,High,22.0,28.0,35.0
+Omiebox Bentobox Blue Sky,A,24278.41,11.054054054054054,14.999899899565898,High,20.0,25.0,31.0
+OmiePod fork & spoon set,A,20405.97,6.590909090909091,8.15441876865209,High,11.0,14.0,18.0
+OmieDip (set of 2),A,20042.92,7.386861313868613,9.504834818614901,High,13.0,16.0,20.0
+Omiebox Bentobox Purple Plum,A,18083.0,7.864864864864865,7.927316213091437,High,11.0,15.0,19.0
+OmieBox Pastel,A,15032.77,8.6,6.311365409587162,Medium,8.0,12.0,17.0
+Yumbox Tapas 5 Compartments (Large),A,12811.6,2.5172413793103448,2.2783776021000395,Medium,4.0,5.0,7.0
+Omiebox Bentobox Green Meadow,A,11690.8,5.9375,6.7772746449368,High,10.0,13.0,16.0
+MontiiCo 700ml Water Bottle,A,10738.22,3.10752688172043,3.177578944359854,High,5.0,6.0,8.0
+Yumbox Panino 4 Compartments (Medium),A,9613.01,2.186991869918699,2.5746226637294054,High,4.0,5.0,6.0
+MontiiCo 475ml Water Bottle,A,9599.17,2.9357798165137616,3.1069671688171043,High,5.0,6.0,8.0
+OmieBox UP,A,9243.029999999999,2.9375,2.636940925923163,Medium,4.0,5.0,7.0
+OmieTote,A,8965.88,4.0,3.567530340063379,Medium,5.0,7.0,9.0
+Montiico Large insulated Lunch bag,A,8567.89,1.9784172661870503,1.7671217320636405,Medium,2.0,3.0,4.0
+Yumbox Tapas 4 Compartments (Large),A,8285.19,2.088888888888889,1.7587306738159834,Medium,2.0,3.0,4.0
+Name Customization,A,8278.02,9.20754716981132,13.108069285992736,High,18.0,22.0,27.0
+MontiiCo Original Bottle 600ml,A,8273.14,2.7586206896551726,2.560729897951878,Medium,4.0,5.0,7.0
+Yumbox Zuppa (spoon included),A,8183.8,3.064935064935065,2.970635508552896,Medium,4.0,5.0,7.0
+Yumbox Presto,A,7955.48,2.3015873015873014,1.8459626445292545,Medium,2.0,3.0,4.0
+Montiico Backpack,A,7652.82,1.6216216216216217,1.265299490627733,Medium,1.0,2.0,3.0
+Yumbox Original 6 Compartments (Medium),A,7587.8,2.027027027027027,1.9421612116377391,Medium,2.0,3.0,4.0
+Omiebox Bentobox Yellow Sunshine,A,7369.91,4.129032258064516,3.853500014998235,Medium,5.0,7.0,9.0
+OmieSnack,A,5192.25,3.3469387755102042,3.964018685695466,High,5.0,7.0,8.0
+OmieBottle,A,5189.8,3.753623188405797,3.6638367751236554,Medium,5.0,7.0,9.0
+Omiebox Bentobox Scooter Red,A,4692.599999999999,3.185185185185185,3.2348705483198965,High,5.0,6.0,8.0
+OmiePod UP,A,4477.04,6.225806451612903,5.925704894324697,Medium,8.0,11.0,14.0
+Bento Three + (Large),A,4421.13,2.9565217391304346,2.95113177339836,Medium,4.0,5.0,7.0
+ThermoFlask Water Bottle,B,4360.86,2.4716981132075473,2.598844222289428,High,3.0,4.0,5.0
+Yumbox Prêt,B,3954.0699999999997,6.363636363636363,6.756814741765934,High,8.0,11.0,14.0
+Bento Three (Medium),B,3682.51,2.176470588235294,2.258920469093412,High,3.0,4.0,5.0
+MontiiCo 350ml Water Bottle,B,3148.66,2.2698412698412698,2.294497971701064,High,3.0,4.0,5.0
+Yumbox Snack,B,3135.7,1.974025974025974,1.891629943044288,Medium,2.0,3.0,4.0
+Bento Five (Medium),B,1915.93,1.305084745762712,0.8954720829344824,Medium,1.0,2.0,2.0
+Montiico insulated medium lunch bag,B,1730.57,2.1621621621621623,1.833538072105911,Medium,2.0,3.0,4.0
+MontiiCo Mini Bottle 350ml,B,1668.18,2.5161290322580645,2.461313575335136,Medium,3.0,4.0,6.0
+Reusable Food Storage Bags,B,1631.8400000000001,2.9444444444444446,2.4608038433722332,Medium,3.0,4.0,6.0
+Stix (Set of 4),B,1629.45,3.046875,3.1744500211072686,High,4.0,5.0,7.0
+MontiiCo Mega Drink Bottle 1L,B,1592.96,2.0,1.378404875209022,Medium,2.0,3.0,4.0
+Silicone Cups (Set of 3),B,1572.3600000000001,3.6346153846153846,4.463485168472103,High,5.0,7.0,9.0
+OmieDip UP,B,1531.37,5.083333333333333,4.122186827695252,Medium,5.0,7.0,10.0
+Unknown,B,1500.96,6.805555555555555,4.973182047999016,Medium,6.0,9.0,13.0
+Stix (Set of 7),B,1410.0,10.76923076923077,11.203822607737104,High,13.0,18.0,24.0
+MontiiCo Insulated Food Jar,B,1314.63,2.9130434782608696,1.9519930019961385,Medium,2.0,3.0,5.0
+OmieChill,B,1227.87,1.6046511627906976,1.3118423047600423,Medium,1.0,2.0,3.0
+Yumbox Sandwich Paper Wrap,B,1200.67,2.2903225806451615,1.73577165140074,Medium,2.0,3.0,4.0
+Bento Two (Small),B,1193.52,2.7419354838709675,2.732126667823485,Medium,3.0,4.0,6.0
+Mini Fork and Spoon (Set of 6),B,1158.58,2.44,2.9908704623318245,High,3.0,4.0,5.0
+Lunch Punch Set of 2 Sandwich Cutters,B,1087.8,1.8620689655172413,1.4920641049921175,Medium,2.0,3.0,4.0
+OmieGo Bio (Set of 3),B,1063.79,1.380952380952381,1.3219754338182867,Medium,1.0,2.0,2.0
+Silicone Wrap Bands (Set of 5),B,1060.27,1.9074074074074074,1.9354539082312165,High,2.0,3.0,4.0
+Silicone Cups,B,1050.08,3.3333333333333335,2.927700218845599,Medium,3.0,5.0,6.0
+Bento Five - Print (Medium),B,972.0,2.0,1.5118578920369088,Medium,2.0,3.0,4.0
+REUSABLE SANDWICH BAG - SET OF 2,B,955.8100000000001,1.5263157894736843,1.1327279224202258,Medium,1.0,2.0,3.0
+MontiiCo Mini Smoothie Cup 275ml,B,916.22,1.5,1.0656421633639426,Medium,1.0,2.0,2.0
+ThermoFlask Food Jar 591ml,B,891.9300000000001,2.2142857142857144,1.5281246137553164,Medium,2.0,3.0,4.0
+MontiiCo Bumper for Original and Mini bottles,B,883.73,2.5135135135135136,2.0752430957923713,Medium,2.0,3.0,5.0
+Omiebox divider,B,882.44,2.5520833333333335,2.5251150746749893,Medium,3.0,4.0,6.0
+Kids Raw Honey Baltic Amber Teething Necklace,B,842.28,1.25,0.508000508000762,Low,1.0,2.0,2.0
+Funny Monsters Silicone Condiment Squeeze,B,776.9,2.0,1.7126976771553504,Medium,2.0,3.0,4.0
+Laser Engraving,B,772.1899999999999,2.6,1.9574419397183718,Medium,2.0,3.0,5.0
+MontiiCo Out and About Cutlery Set of 8,B,746.03,2.6774193548387095,2.4274416817463544,Medium,3.0,4.0,6.0
+"Small Bumper -350ML, 475ML, 700ML",B,737.91,2.984732824427481,2.809283327235524,Medium,3.0,4.0,6.0
+Multicolor Mini Silicone Cubes Set of 8,B,728.28,4.055555555555555,4.4783429475148,High,5.0,7.0,9.0
+ThermoFlask Tumbler,B,712.65,1.2777777777777777,0.5745131499601416,Low,1.0,2.0,2.0
+MontiiCo Original Smoothie Cup 450ml,C,710.86,1.5416666666666667,1.5568425948849893,High,2.0,3.0,4.0
+Reusable Sandwich Bags,C,689.75,1.368421052631579,0.9130007735581503,Medium,1.0,2.0,2.0
+OmiePod Refill,C,687.4,1.5,1.3113017178063753,Medium,1.0,2.0,2.0
+MontiiCo 1L Screw Lid Bottle,C,675.67,1.7142857142857142,1.1126972805283737,Medium,1.0,2.0,3.0
+Mini Wellness Juice Bottles - Set of 6,C,660.46,4.153846153846154,3.3626912299068294,Medium,3.0,5.0,7.0
+MontiiCo Mega Insulated Food Jar 500ml,C,648.66,1.8333333333333333,1.329160135825126,Medium,1.0,2.0,3.0
+MontiiCo Icepack 2.0 Medium,C,620.4,3.0,2.801098685543558,Medium,2.0,3.0,5.0
+Yumbox Classic Lunch Bag,C,576.54,1.1904761904761905,0.749603069567329,Medium,1.0,2.0,2.0
+Yumbox Sleeve Lunch Bag with Handles,C,544.21,1.36,0.9521904571390467,Medium,1.0,2.0,2.0
+Avanchy Bamboo Baby Plate and Spoon,C,510.0,1.2173913043478262,0.5997364375010101,Low,1.0,2.0,2.0
+Bento Two - Prints (Small),C,509.84,3.0,3.6136994243312164,High,3.0,4.0,6.0
+Omiebox Lid Seal,C,489.41,1.527027027027027,0.939585641302444,Medium,1.0,2.0,3.0
+MontiiCo Regular Coffee Cup 350ml,C,487.2,1.8888888888888888,1.0226199851298272,Medium,1.0,2.0,3.0
+OmiePlate,C,467.76,1.1818181818181819,0.40451991747794525,Low,0.0,1.0,1.0
+MontiiCo Drink Bottle Lid- Free Pour (Original Design),C,436.12,2.4390243902439024,2.214145213031486,Medium,2.0,3.0,4.0
+MontiiCo Pencil Case,C,428.88,1.1282051282051282,0.6950761858843504,Medium,1.0,2.0,2.0
+Kids Raw Cognac Baltic Amber Teething Necklace,C,399.78999999999996,1.2666666666666666,0.5936168397046636,Low,1.0,2.0,2.0
+MontiiCo 1.5L Screw Lid Bottle,C,391.88,1.7777777777777777,1.7159383568311668,Medium,2.0,3.0,4.0
+Sticker Set,C,373.90000000000003,1.8222222222222222,2.0702315295296287,High,2.0,3.0,4.0
+MontiiCo Coffee Cup,C,371.10999999999996,1.9,1.4491376746189437,Medium,2.0,3.0,4.0
+Yumbox Aqua Water Bottle,C,352.56,3.25,0.9574271077563381,Low,1.0,3.0,4.0
+Feast Lunchbox,C,342.33,1.3333333333333333,0.5773502691896257,Low,1.0,2.0,2.0
+MontiiCo Mega Coffee Cup 475ml,C,322.02,1.75,1.2154310870109943,Medium,1.0,2.0,3.0
+Mini Insulated Food Jar,C,308.12,1.2,0.4472135954999579,Low,1.0,2.0,2.0
+Avanchy Bamboo Suction Bowl and Spoon,C,305.15,0.9411764705882353,0.24253562503633297,Low,0.0,0.0,1.0
+Insulated Food Jar,C,297.31,2.3333333333333335,1.5275252316519468,Medium,2.0,3.0,4.0
+MontiiCo Dip & Sauce Surprise Box,C,278.46,1.8571428571428572,2.007130147392398,High,2.0,3.0,4.0
+MontiiCo Drink Bottle Lid (Old Design),C,273.86,2.9761904761904763,2.608504807104555,Medium,2.0,3.0,5.0
+Lunch Punch Christmas Bento Fun Set,C,269.39,1.75,1.5811388300841898,Medium,2.0,3.0,4.0
+Kids Raw Rainbow Baltic Amber Teething Necklace,C,261.26,1.0,0.0,Low,0.0,0.0,1.0
+Omiebox Thermos Lid,C,259.51,1.1346153846153846,0.4440829349254552,Low,1.0,2.0,2.0
+Unicorn Silicone Condiment Squeeze Bottles,C,247.67,1.5,1.0118347314702751,Medium,1.0,2.0,2.0
+Yumbox Poke Bowl,C,237.84,1.0,0.4472135954999579,Low,1.0,1.0,2.0
+Omiebox Thermos Container Replacement part,C,229.75,1.6153846153846154,0.7679476477883044,Low,1.0,2.0,3.0
+Totseat Portable Highchair,C,225.0,1.0,0.0,Low,0.0,0.0,1.0
+Baby banana 2 in 1 Teether and Toothbrush,C,222.0,1.3333333333333333,0.778498944161523,Medium,1.0,2.0,2.0
+Yumbox Tapas 4C Tray,C,193.69,1.0,0.7385489458759964,Medium,1.0,1.0,2.0
+Haakaa 3rd Gen Silicone Breast Pump,C,184.68,1.1666666666666667,0.408248290463863,Low,0.0,1.0,1.0
+Yumbox Mini Silicone Bento Cup - Set of 6,C,180.19,1.4166666666666667,0.90033663737852,Medium,1.0,2.0,2.0
+Soft Straws Reusable Silicone Straws,C,177.51,0.8235294117647058,0.39295262399668784,Low,0.0,0.0,1.0
+Yumbox Tapas 5C Tray,C,157.67,0.7777777777777778,0.44095855184409843,Medium,0.0,0.0,1.0
+Yumbox Reusable Sandwich Bag - Set of 2,C,144.14,1.0,0.8944271909999159,Medium,1.0,1.0,2.0
+Kids Raw Multi Baltic Amber Teething Necklace,C,140.54,1.0,0.0,Low,0.0,0.0,1.0
+Avanchy Stainless Steel Suction Baby Bowl + Air Tight Lid,C,140.54,1.25,0.9574271077563382,Medium,1.0,2.0,2.0
+Baby Banana 2 in 1 Toothbrush and Teether no handles,C,115.0,1.0,0.0,Low,0.0,0.0,1.0
+Malachite Mix + Raw Cognac Amber Necklace,C,108.11,1.0,0.0,Low,0.0,0.0,1.0
+Play + Activity Gym,C,95.0,1.0,0.0,Low,0.0,0.0,1.0
+MontiiCo Zip Up Pouch,C,89.22,0.7,0.48304589153964794,Medium,1.0,1.0,2.0
+MontiiCo Mega Bumpers (Original Design),C,84.62,1.3157894736842106,0.7747802882245631,Medium,1.0,2.0,2.0
+Feast Tray,C,81.99000000000001,1.5,0.7071067811865476,Low,1.0,2.0,2.0
+MontiiCo Silicone Cutlery Band for Food Jar,C,81.74,1.5,0.75955452531275,Medium,1.0,2.0,2.0
+BabyComfy Nasal Aspirator,C,78.5,1.1111111111111112,0.3333333333333333,Low,0.0,1.0,1.0
+Avanchy La Petite Mini Silicone Baby Cup,C,75.77000000000001,1.0,0.0,Low,0.0,0.0,1.0
+Breast Pump Bra Hands-Free Zip-Up,C,67.57,1.0,0.0,Low,0.0,0.0,1.0
+Swimava Rings,C,67.57,1.0,0.5345224838248487,Medium,1.0,1.0,2.0
+Yumbox Sleeve Lunch Bag,C,61.260000000000005,1.0,0.0,Low,0.0,0.0,1.0
+BabyComfy Deluxe Safety Nail Clipper,C,60.36,1.0,0.0,Low,0.0,0.0,1.0
+Play Mat Bag,C,60.0,1.0,0.0,Low,0.0,0.0,1.0
+Haakaa 2nd Gen Silicone Breast Pump with Suction,C,54.06,1.0,0.0,Low,0.0,0.0,1.0
+Kids Raw Honey Baltic Amber Bracelet,C,54.06,1.0,0.0,Low,0.0,0.0,1.0
+No Nasties Hair Chalk,C,49.45,1.5,0.7071067811865476,Low,1.0,2.0,2.0
+Child’s Apron with bandana,C,48.669999999999995,1.0,0.0,Low,0.0,0.0,1.0
+Raw Dalmatian Jasper + Raw Cherry Amber Kids Necklace,C,45.04,0.6,0.5477225575051661,Medium,1.0,1.0,2.0
+Omiebox Securing Insert,C,43.24,0.8823529411764706,0.485071250072666,Medium,1.0,1.0,2.0
+Bee's Wrap Assorted 3 Pack,C,40.54,2.5,0.7071067811865476,Low,1.0,2.0,4.0
+Eco-Kids All Natural Crayons,C,40.26,1.6,0.8944271909999159,Medium,1.0,2.0,3.0
+Avanchy Bamboo Suction Classic Plate,C,38.739999999999995,1.0,0.0,Low,0.0,0.0,1.0
+Budy Bib 3 in 1 Teether,C,36.04,1.0,0.0,Low,0.0,0.0,1.0
+Kids Raw Rainbow Baltic Amber Bracelet,C,36.04,1.0,0.0,Low,0.0,0.0,1.0
+Kids Raw Multi Baltic Amber Bracelet,C,36.04,1.0,0.0,Low,0.0,0.0,1.0
+Avanchy Silicone Spoons Set of 5,C,35.13,3.0,0.0,Low,0.0,1.0,3.0
+Eco-kids Face Paint,C,27.14,3.0,0.0,Low,0.0,1.0,3.0
+Attipas Shoes,C,27.03,0.6,0.5477225575051661,Medium,1.0,1.0,2.0
+Yumbox Minisnack,C,27.03,1.0,0.0,Low,0.0,0.0,1.0
+Toddler’s Apron,C,27.03,1.0,0.0,Low,0.0,0.0,1.0
+Stone + Snack Board Trio,C,27.03,1.0,0.0,Low,0.0,0.0,1.0
+Bebe au Lait Breastfeeding Cover,C,27.03,1.0,0.0,Low,0.0,0.0,1.0
+Bee's Wrap Small 3 Pack,C,25.24,1.0,1.0,High,1.0,1.0,2.0
+Kids Raw Cognac Flower  Baltic Amber Teething Necklace,C,25.23,1.0,0.0,Low,0.0,0.0,1.0
+Kids Raw Cherry Baltic Amber Necklace,C,22.52,1.0,0.0,Low,0.0,0.0,1.0
+"MontiiCo Large Bumper - 1L, 1.5L - Midnight",C,22.52,1.2857142857142858,1.3801311186847083,High,2.0,3.0,3.0
+Feather Teether,C,22.52,1.0,0.0,Low,0.0,0.0,1.0
+Doidy Cup,C,21.67,1.0,0.0,Low,0.0,0.0,1.0
+Gilligan O'malley Breastfeeding Bra,C,20.71,1.0,0.0,Low,0.0,0.0,1.0
+Eyeshadow & Balm Duo Party Pack,C,20.0,2.0,0.0,Low,0.0,1.0,2.0
+Slingshot with Felt Balls,C,18.02,1.0,0.0,Low,0.0,0.0,1.0
+Clacker Keys,C,18.02,1.0,0.0,Low,0.0,0.0,1.0
+Avocado Stacker,C,18.02,1.0,0.0,Low,0.0,0.0,1.0
+Peg Puzzle Toy,C,18.01,1.0,0.0,Low,0.0,0.0,1.0
+Lunch Punch Sandwich Cutter,C,15.0,1.5,0.7071067811865476,Low,1.0,2.0,2.0
+Rocket Teether,C,15.0,1.0,0.0,Low,0.0,0.0,1.0
+Bee's Wrap Bread,C,14.0,1.5,0.7071067811865476,Low,1.0,2.0,2.0
+Avanchy La Petite Silicone Mini Bowl,C,13.5,0.3333333333333333,0.5773502691896258,High,1.0,1.0,1.0
+Bee's Wrap Baguette,C,12.61,2.0,0.0,Low,0.0,1.0,2.0
+Alphabet Busy Bag,C,12.0,1.0,0.0,Low,0.0,0.0,1.0
+OmieBox UP Lid Seal,C,10.82,2.0,0.0,Low,0.0,1.0,2.0
+Animal Matching Busy Bag,C,10.81,0.5,0.7071067811865476,High,1.0,1.0,2.0
+Bee's Wrap Medium 3 Pack,C,7.21,1.0,0.0,Low,0.0,0.0,1.0
+MontiiCo Drink Bottle Sports Lid 2.0,C,0.0,1.0,0.0,Low,0.0,0.0,1.0
+Kids African Turquoise + Raw Cognac Amber Necklace,C,0.0,1.0,0.0,Low,0.0,0.0,1.0

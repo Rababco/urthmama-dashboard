@@ -1,0 +1,164 @@
+product_title,product_status,lifetime_units,active_months,nonzero_months,mean_monthly,units_last_12m,mape,mase,mae,forecast_tier
+Alphabet Busy Bag,Intermittent,2,22,2,0.09090909090909091,1,,,,
+Animal Matching Busy Bag,Discontinued,1,24,1,0.041666666666666664,0,,,,
+Attipas Shoes,Discontinued,3,20,3,0.15,0,,,,
+Avanchy Bamboo Baby Plate and Spoon,Intermittent,28,41,18,0.6829268292682927,7,,,,
+Avanchy Bamboo Suction Bowl and Spoon,Discontinued,16,41,11,0.3902439024390244,0,,,,
+Avanchy Bamboo Suction Classic Plate,Discontinued,2,30,2,0.06666666666666667,0,,,,
+Avanchy La Petite Mini Silicone Baby Cup,Discontinued,10,41,9,0.24390243902439024,0,,,,
+Avanchy La Petite Silicone Mini Bowl,Discontinued,1,24,1,0.041666666666666664,0,,,,
+Avanchy Silicone Spoons Set of 5,Discontinued,3,24,1,0.125,0,,,,
+Avanchy Stainless Steel Suction Baby Bowl + Air Tight Lid,Discontinued,5,40,2,0.125,0,,,,
+Avocado Stacker,Discontinued,1,34,1,0.029411764705882353,0,,,,
+Baby Banana 2 in 1 Toothbrush and Teether no handles,Intermittent,9,41,9,0.21951219512195122,1,,,,
+Baby banana 2 in 1 Teether and Toothbrush,Intermittent,16,40,10,0.4,3,,,,
+BabyComfy Deluxe Safety Nail Clipper,Discontinued,7,40,7,0.175,0,,,,
+BabyComfy Nasal Aspirator,Discontinued,10,41,9,0.24390243902439024,0,,,,
+Bebe au Lait Breastfeeding Cover,Discontinued,1,36,1,0.027777777777777776,0,,,,
+Bee's Wrap Assorted 3 Pack,Discontinued,5,24,2,0.20833333333333334,0,,,,
+Bee's Wrap Baguette,Discontinued,2,23,1,0.08695652173913043,0,,,,
+Bee's Wrap Bread,Discontinued,3,24,2,0.125,0,,,,
+Bee's Wrap Medium 3 Pack,Discontinued,1,23,1,0.043478260869565216,0,,,,
+Bee's Wrap Small 3 Pack,Discontinued,3,23,2,0.13043478260869565,0,,,,
+Bento Five (Medium),Active,77,35,25,2.2,32,75.5,0.881,1.93,Seasonal ETS
+Bento Five - Print (Medium),Active,44,35,14,1.2571428571428571,3,,0.0,0.0,Seasonal ETS
+Bento Three (Medium),Active,148,35,23,4.228571428571429,38,100.0,0.194,1.0,Seasonal ETS
+Bento Three + (Large),Active,136,36,23,3.7777777777777777,33,,0.0,0.0,Seasonal ETS
+Bento Two (Small),Discontinued,85,35,14,2.4285714285714284,0,,,,
+Bento Two - Prints (Small),Discontinued,54,34,11,1.588235294117647,0,,,,
+Breast Pump Bra Hands-Free Zip-Up,Discontinued,3,23,1,0.13043478260869565,0,,,,
+Budy Bib 3 in 1 Teether,Discontinued,5,24,2,0.20833333333333334,0,,,,
+Child’s Apron with bandana,Intermittent,7,21,4,0.3333333333333333,4,,,,
+Clacker Keys,Discontinued,1,34,1,0.029411764705882353,0,,,,
+Doidy Cup,Discontinued,3,41,2,0.07317073170731707,0,,,,
+Eco-Kids All Natural Crayons,Discontinued,8,40,5,0.2,0,,,,
+Eco-kids Face Paint,Discontinued,3,40,1,0.075,0,,,,
+Eyeshadow & Balm Duo Party Pack,Discontinued,2,40,1,0.05,0,,,,
+Feast Lunchbox,Active,4,1,1,4.0,4,,,,
+Feast Tray,Active,3,1,1,3.0,3,,,,
+Feather Teether,Discontinued,2,34,2,0.058823529411764705,0,,,,
+Funny Monsters Silicone Condiment Squeeze,Active,62,40,21,1.55,11,,0.0,0.0,Seasonal ETS
+Gilligan O'malley Breastfeeding Bra,Discontinued,3,28,3,0.10714285714285714,0,,,,
+Haakaa 2nd Gen Silicone Breast Pump with Suction,Discontinued,2,33,2,0.06060606060606061,0,,,,
+Haakaa 3rd Gen Silicone Breast Pump,Intermittent,7,29,6,0.2413793103448276,2,,,,
+Insulated Food Jar,Active,7,1,1,7.0,7,,,,
+Kids African Turquoise + Raw Cognac Amber Necklace,Discontinued,1,17,1,0.058823529411764705,0,,,,
+Kids Raw Cherry Baltic Amber Necklace,Discontinued,2,17,2,0.11764705882352941,0,,,,
+Kids Raw Cognac Baltic Amber Teething Necklace,Intermittent,19,41,12,0.4634146341463415,8,,,,
+Kids Raw Cognac Flower  Baltic Amber Teething Necklace,Discontinued,1,19,1,0.05263157894736842,0,,,,
+Kids Raw Honey Baltic Amber Bracelet,Intermittent,3,35,3,0.08571428571428572,2,,,,
+Kids Raw Honey Baltic Amber Teething Necklace,Active,40,39,27,1.0256410256410255,13,49.8,0.426,0.39,Seasonal ETS
+Kids Raw Multi Baltic Amber Bracelet,Discontinued,2,33,2,0.06060606060606061,0,,,,
+Kids Raw Multi Baltic Amber Teething Necklace,Intermittent,7,40,7,0.175,2,,,,
+Kids Raw Rainbow Baltic Amber Bracelet,Intermittent,2,13,2,0.15384615384615385,1,,,,
+Kids Raw Rainbow Baltic Amber Teething Necklace,Intermittent,11,40,8,0.275,4,,,,
+Laser Engraving,Active,52,16,10,3.25,46,100.0,2.4,6.0,Seasonal Index
+Lunch Punch Christmas Bento Fun Set,Intermittent,14,38,7,0.3684210526315789,1,,,,
+Lunch Punch Sandwich Cutter,Discontinued,3,41,2,0.07317073170731707,0,,,,
+Lunch Punch Set of 2 Sandwich Cutters,Active,108,38,16,2.8421052631578947,45,41.2,0.405,1.38,Seasonal ETS
+Malachite Mix + Raw Cognac Amber Necklace,Discontinued,5,30,5,0.16666666666666666,0,,,,
+Mini Fork and Spoon (Set of 6),Active,122,41,24,2.975609756097561,32,76.4,0.291,1.04,Seasonal ETS
+Mini Insulated Food Jar,Active,6,2,2,3.0,6,,,,
+Mini Wellness Juice Bottles - Set of 6,Active,54,27,13,2.0,20,,0.251,0.75,Seasonal ETS
+MontiiCo 1.5L Screw Lid Bottle,Active,16,16,9,1.0,14,100.0,1.138,0.85,Seasonal Index
+MontiiCo 1L Screw Lid Bottle,Intermittent,12,16,6,0.75,10,,,,
+MontiiCo 350ml Water Bottle,Active,143,28,27,5.107142857142857,72,71.1,0.479,2.12,Seasonal ETS
+MontiiCo 475ml Water Bottle,Active,320,28,28,11.428571428571429,122,94.1,0.927,9.12,Seasonal ETS
+MontiiCo 700ml Water Bottle,Active,289,28,28,10.321428571428571,77,100.0,1.412,10.0,Seasonal ETS
+MontiiCo Bumper for Original and Mini bottles,Discontinued,279,40,22,6.975,0,,,,
+MontiiCo Coffee Cup,Active,19,14,9,1.3571428571428572,18,73.2,0.563,1.35,Non-seasonal ETS
+MontiiCo Dip & Sauce Surprise Box,Active,39,28,16,1.3928571428571428,10,90.4,0.882,1.29,Seasonal ETS
+MontiiCo Drink Bottle Lid (Old Design),Active,125,40,28,3.125,10,95.6,0.122,0.32,Seasonal ETS
+MontiiCo Drink Bottle Lid- Free Pour (Original Design),Active,100,40,26,2.5,12,12.6,0.015,0.04,Seasonal ETS
+MontiiCo Drink Bottle Sports Lid 2.0,Discontinued,1,28,1,0.03571428571428571,0,,,,
+MontiiCo Icepack 2.0 Medium,Active,42,40,12,1.05,12,100.0,0.235,0.33,Seasonal ETS
+MontiiCo Insulated Food Jar,Discontinued,67,38,10,1.763157894736842,0,,,,
+"MontiiCo Large Bumper - 1L, 1.5L - Midnight",Intermittent,9,12,5,0.75,9,,,,
+MontiiCo Mega Bumpers (Original Design),Active,50,31,17,1.6129032258064515,12,,0.302,0.59,Seasonal ETS
+MontiiCo Mega Coffee Cup 475ml,Discontinued,21,34,12,0.6176470588235294,0,,,,
+MontiiCo Mega Drink Bottle 1L,Discontinued,42,40,16,1.05,0,,,,
+MontiiCo Mega Insulated Food Jar 500ml,Discontinued,11,37,6,0.2972972972972973,0,,,,
+MontiiCo Mini Bottle 350ml,Discontinued,78,36,11,2.1666666666666665,0,,,,
+MontiiCo Mini Smoothie Cup 275ml,Active,90,36,23,2.5,20,,0.0,0.0,Seasonal ETS
+MontiiCo Original Bottle 600ml,Discontinued,240,41,20,5.853658536585366,0,,,,
+MontiiCo Original Smoothie Cup 450ml,Active,74,32,18,2.3125,43,,1.018,3.27,Seasonal ETS
+MontiiCo Out and About Cutlery Set of 8,Active,83,38,20,2.1842105263157894,13,100.0,0.447,1.0,Seasonal ETS
+MontiiCo Pencil Case,Active,44,28,17,1.5714285714285714,16,,0.609,1.4,Seasonal ETS
+MontiiCo Regular Coffee Cup 350ml,Discontinued,34,36,13,0.9444444444444444,0,,,,
+MontiiCo Silicone Cutlery Band for Food Jar,Discontinued,21,38,7,0.5526315789473685,0,,,,
+MontiiCo Zip Up Pouch,Intermittent,7,10,5,0.7,7,,,,
+Montiico Backpack,Active,180,41,33,4.390243902439025,38,46.9,0.062,0.31,Seasonal ETS
+Montiico Large insulated Lunch bag,Active,275,41,34,6.7073170731707314,86,99.1,0.383,2.89,Seasonal ETS
+Montiico insulated medium lunch bag,Active,80,40,20,2.0,26,100.0,0.444,1.0,Seasonal ETS
+Multicolor Mini Silicone Cubes Set of 8,Active,73,33,17,2.212121212121212,19,,0.168,0.38,Seasonal ETS
+Name Customization,Active,488,31,30,15.741935483870968,142,100.0,0.424,5.33,Seasonal ETS
+No Nasties Hair Chalk,Discontinued,3,40,2,0.075,0,,,,
+OmieBottle,Active,259,23,23,11.26086956521739,147,138.3,0.345,3.47,Seasonal Index
+OmieBox Pastel,Active,215,5,5,43.0,215,,,,
+OmieBox UP,Active,141,22,17,6.409090909090909,94,58.9,0.332,2.45,Seasonal Index
+OmieBox UP Lid Seal,Active,2,1,1,2.0,2,,,,
+OmieChill,Active,69,29,18,2.3793103448275863,27,100.0,0.433,1.26,Seasonal ETS
+OmieDip (set of 2),Active,1012,41,40,24.682926829268293,348,89.4,0.741,13.72,Seasonal ETS
+OmieDip UP,Active,61,8,5,7.625,61,637.5,2.61,23.49,Non-seasonal ETS
+OmieGo Bio (Set of 3),Intermittent,29,40,13,0.725,11,,,,
+OmiePlate,Active,13,8,6,1.625,13,307.4,0.887,3.55,Non-seasonal ETS
+OmiePod Refill,Active,63,29,20,2.1724137931034484,25,46.5,0.174,0.47,Seasonal ETS
+OmiePod UP,Active,193,8,8,24.125,193,573.9,1.859,58.08,Non-seasonal ETS
+OmiePod fork & spoon set,Active,1160,41,41,28.29268292682927,350,215.5,0.617,15.48,Seasonal ETS
+OmieSnack,Active,328,38,35,8.631578947368421,59,300.9,0.459,4.01,Seasonal ETS
+OmieTote,Active,268,29,23,9.241379310344827,114,76.2,0.378,3.43,Seasonal ETS
+Omiebox Bentobox Blue Sky,Active,409,41,37,9.975609756097562,154,968.1,0.547,6.22,Seasonal ETS
+Omiebox Bentobox Green Meadow,Active,190,41,32,4.634146341463414,64,,0.7,3.65,Seasonal ETS
+Omiebox Bentobox Pink Berry,Active,492,41,37,12.0,161,,0.636,7.58,Seasonal ETS
+Omiebox Bentobox Purple Plum,Active,291,41,37,7.097560975609756,103,,1.176,7.78,Seasonal ETS
+Omiebox Bentobox Scooter Red,Active,86,36,27,2.388888888888889,22,,0.43,0.99,Seasonal ETS
+Omiebox Bentobox Yellow Sunshine,Active,128,41,31,3.1219512195121952,38,,0.707,2.18,Seasonal ETS
+Omiebox Lid Seal,Active,113,29,22,3.896551724137931,70,140.4,0.816,2.71,Seasonal ETS
+Omiebox Securing Insert,Intermittent,15,40,9,0.375,5,,,,
+Omiebox Thermos Container Replacement part,Intermittent,21,40,13,0.525,3,,,,
+Omiebox Thermos Lid,Active,59,40,28,1.475,26,66.2,0.532,0.78,Seasonal ETS
+Omiebox divider,Active,245,40,32,6.125,79,66.8,0.351,1.74,Seasonal ETS
+Peg Puzzle Toy,Discontinued,1,18,1,0.05555555555555555,0,,,,
+Play + Activity Gym,Discontinued,1,27,1,0.037037037037037035,0,,,,
+Play Mat Bag,Discontinued,2,39,2,0.05128205128205128,0,,,,
+REUSABLE SANDWICH BAG - SET OF 2,Active,58,27,16,2.1481481481481484,11,,0.0,0.0,Seasonal ETS
+Raw Dalmatian Jasper + Raw Cherry Amber Kids Necklace,Discontinued,3,36,3,0.08333333333333333,0,,,,
+Reusable Food Storage Bags,Active,53,33,15,1.606060606060606,17,100.0,0.223,0.39,Seasonal ETS
+Reusable Sandwich Bags,Active,52,33,19,1.5757575757575757,20,70.0,0.589,1.12,Seasonal ETS
+Rocket Teether,Discontinued,1,34,1,0.029411764705882353,0,,,,
+Silicone Cups,Active,120,35,19,3.4285714285714284,11,100.0,1.322,3.67,Seasonal ETS
+Silicone Cups (Set of 3),Active,189,41,26,4.609756097560975,36,84.1,0.547,2.76,Seasonal ETS
+Silicone Wrap Bands (Set of 5),Active,103,40,23,2.575,25,18.6,0.081,0.17,Seasonal ETS
+Slingshot with Felt Balls,Intermittent,2,16,2,0.125,1,,,,
+"Small Bumper -350ML, 475ML, 700ML",Active,391,28,28,13.964285714285714,139,506.5,0.898,11.44,Seasonal ETS
+Soft Straws Reusable Silicone Straws,Intermittent,14,40,13,0.35,3,,,,
+Sticker Set,Active,82,27,20,3.037037037037037,17,100.0,0.098,0.33,Seasonal ETS
+Stix (Set of 4),Active,195,41,30,4.7560975609756095,55,91.7,1.233,5.36,Seasonal ETS
+Stix (Set of 7),Active,140,40,12,3.5,27,216.7,0.206,0.72,Seasonal ETS
+Stone + Snack Board Trio,Discontinued,1,40,1,0.025,0,,,,
+Swimava Rings,Intermittent,8,32,6,0.25,2,,,,
+ThermoFlask Food Jar 591ml,Active,31,5,4,6.2,31,,,,
+ThermoFlask Tumbler,Discontinued,23,21,6,1.0952380952380953,0,,,,
+ThermoFlask Water Bottle,Discontinued,131,41,24,3.1951219512195124,0,,,,
+Toddler’s Apron,Intermittent,3,21,3,0.14285714285714285,1,,,,
+Totseat Portable Highchair,Intermittent,7,40,7,0.175,1,,,,
+Unicorn Silicone Condiment Squeeze Bottles,Active,33,21,12,1.5714285714285714,14,45.5,0.333,0.67,Seasonal Index
+Yumbox Aqua Water Bottle,Discontinued,13,41,3,0.3170731707317073,0,,,,
+Yumbox Classic Lunch Bag,Intermittent,25,40,13,0.625,6,,,,
+Yumbox Mini Silicone Bento Cup - Set of 6,Active,17,12,7,1.4166666666666667,17,,0.904,2.03,Non-seasonal ETS
+Yumbox Minisnack,Discontinued,2,38,1,0.05263157894736842,0,,,,
+Yumbox Original 6 Compartments (Medium),Active,225,41,32,5.487804878048781,72,157.6,0.495,3.28,Seasonal ETS
+Yumbox Panino 4 Compartments (Medium),Active,269,41,31,6.560975609756097,106,234.5,0.637,4.25,Seasonal ETS
+Yumbox Poke Bowl,Intermittent,11,21,5,0.5238095238095238,4,,,,
+Yumbox Presto,Active,145,32,19,4.53125,44,,0.0,0.0,Seasonal ETS
+Yumbox Prêt,Active,70,5,5,14.0,70,,,,
+Yumbox Reusable Sandwich Bag - Set of 2,Intermittent,6,12,4,0.5,6,,,,
+Yumbox Sandwich Paper Wrap,Active,71,33,21,2.1515151515151514,11,,0.322,0.79,Seasonal ETS
+Yumbox Sleeve Lunch Bag,Discontinued,6,40,5,0.15,0,,,,
+Yumbox Sleeve Lunch Bag with Handles,Active,34,31,13,1.096774193548387,17,8.5,0.24,0.3,Seasonal ETS
+Yumbox Snack,Active,152,33,25,4.606060606060606,83,138.0,0.542,2.92,Seasonal ETS
+Yumbox Tapas 4 Compartments (Large),Active,188,41,32,4.585365853658536,62,32.9,0.326,1.65,Seasonal ETS
+Yumbox Tapas 4C Tray,Intermittent,12,40,9,0.3,2,,,,
+Yumbox Tapas 5 Compartments (Large),Active,292,41,33,7.121951219512195,109,44.2,0.223,1.46,Seasonal ETS
+Yumbox Tapas 5C Tray,Intermittent,7,38,6,0.18421052631578946,4,,,,
+Yumbox Zuppa (spoon included),Active,236,41,30,5.7560975609756095,70,73.7,0.457,2.72,Seasonal ETS
