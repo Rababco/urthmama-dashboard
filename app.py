@@ -122,6 +122,13 @@ st.markdown("""
         margin: 8px 0;
         font-family: 'Open Sans', sans-serif;
     }
+    
+    /* Logout button fix */
+    [data-testid="stSidebar"] button {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
