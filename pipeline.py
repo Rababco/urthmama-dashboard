@@ -3,15 +3,33 @@ UrthMama Forecasting Pipeline
 ==============================
 End-to-end: Raw Shopify CSV → Clean → Forecast → ABC → Inventory → Dashboard CSVs
 
-Business-level model: SARIMAX(1,1,1)(0,1,1,12) with war & maturity regressors
-Product-level model: ETS (per-product)
+PIPELINE OVERVIEW:
+    Step 1 — Data Cleaning: Standardize raw Shopify export, separate shipping
+             from product rows, build order-level and product-monthly aggregations.
+    Step 2 — Business Forecast (SARIMAX): 18-month revenue forecast using
+             SARIMAX with exogenous regressors for the Oct–Nov 2024 Lebanon war
+             shock and a business maturity structural break. Wholesale customers
+             are excluded (sporadic B2B orders reduce accuracy; MAPE improved
+             from 29% to 12% with exclusion). War months are replaced with
+             same-month averages to protect seasonal estimation.
+    Step 3 — Product Forecasts (Tiered ETS): 12-month unit forecasts per product.
+             Tier 1 (≥24 months): full seasonal ETS. Tier 2 (13–23 months):
+             seasonal-index decomposition. Tier 3 (<13 months): non-seasonal ETS.
+             Sparse products (<1 unit/month) use trimmed recent mean.
+             Variant-level allocation based on recent 6-month sales mix.
+    Step 4 — ABC Classification: Pareto analysis ranking products by cumulative
+             revenue contribution. A = top 80%, B = next 15%, C = remaining 5%.
+    Step 5 — Inventory Optimization: Safety stock and reorder points at the
+             variant level, using a 95% service level (z=1.65) and 14-day lead
+             time. Class A products get 20% higher safety stock multiplier.
+
+Business-level model: SARIMAX with AIC-based selection across 6 configurations
+Product-level model: ETS (per-product, tiered by data availability)
 
 Usage:
     from pipeline import run_full_pipeline
     results = run_full_pipeline("path/to/Sales_Data_Urth Mama.csv")
 
-Or from CLI:
-    python pipeline.py "Sales_Data_Urth Mama.csv"
 """
 
 import pandas as pd
@@ -59,10 +77,21 @@ WHOLESALE_CUSTOMERS = [
 
 def clean_shopify_export(raw_csv_path: str) -> dict:
     """
-    Takes a raw Shopify Sales CSV and produces:
-      - orders_clean: one row per order (aggregated)
-      - line_items_clean: one row per line item (product rows only)
-      - product_monthly: product x variant x month aggregation
+    STEP 1: DATA CLEANING
+    
+    Takes a raw Shopify Sales CSV export and produces three clean datasets:
+      - orders_clean: one row per order with revenue, discount, and shipping totals
+      - line_items_clean: one row per product line item (shipping rows excluded)
+      - product_monthly: product × variant × month aggregation for forecasting
+    
+    Key decisions:
+      - Shipping-only rows (no product, zero quantity) are separated and aggregated
+        as fees rather than treated as product sales.
+      - Rows with null product_title but quantity > 0 are Shopify export gaps —
+        included in order totals but excluded from product-level analysis to avoid
+        creating a spurious "Unknown" product series.
+      - Discount info is deduplicated at the order level to avoid double-counting
+        when an order has multiple line items.
     """
     print(f"\n{'='*60}")
     print("STEP 1: CLEANING RAW SHOPIFY EXPORT")
@@ -238,10 +267,26 @@ def build_regressors(index):
 
 def run_business_forecast(orders: pd.DataFrame) -> dict:
     """
-    SARIMAX for point forecasts (handles war dummies + maturity regressor).
-    Prediction intervals built from detrended seasonal residuals — tight,
-    honest, and appropriate for a business with strong seasonality and growth.
+    STEP 2: BUSINESS-LEVEL REVENUE FORECAST (SARIMAX)
     
+    Produces an 18-month monthly revenue forecast for retail sales.
+    
+    Approach:
+      - Model: SARIMAX with AIC-based selection across 6 candidate configurations.
+        Best model is typically SARIMAX(1,1,1)(0,1,1,12).
+      - Exogenous regressors: (1) war dummies for Oct/Nov 2024 Lebanon conflict,
+        (2) maturity indicator for the pre/post Jul 2023 structural break.
+      - Wholesale exclusion: 7 known wholesale customers are removed before
+        forecasting. Their orders are large, sporadic B2B transactions that don't
+        follow seasonal patterns. Excluding them improved MAPE from ~29% to ~12%.
+        A flat monthly wholesale allowance is added back to the final forecast.
+      - War-month handling: mid-series war months are replaced with same-month
+        averages from non-war years (protects seasonal estimation); trailing war
+        months are dropped entirely.
+      - Prediction intervals: built from out-of-sample forecast errors scaled
+        by calendar month, not from theoretical model intervals. Floors at ±10%,
+        caps at ±45%.
+
     NOTE: Wholesale customers are excluded from forecasting. Their orders are
     large, sporadic, and don't follow seasonal patterns — including them
     reduces forecast accuracy significantly (MAPE 29% → 12% with exclusion).
@@ -267,14 +312,17 @@ def run_business_forecast(orders: pd.DataFrame) -> dict:
     
     orders_retail["year_month"] = orders_retail["day"].dt.to_period("M").dt.to_timestamp()
 
+    # Use product revenue only (exclude shipping fees from forecasting)
+    orders_retail["product_revenue"] = orders_retail["order_total_sales"] - orders_retail["shipping_fee"]
+
     monthly_sales = (
         orders_retail.groupby("year_month")
-        .agg(order_total_sales=("order_total_sales", "sum"),
+        .agg(product_revenue=("product_revenue", "sum"),
              order_count=("order_name", "count"),
              items_count=("items_count", "sum"))
     )
 
-    business_ts = monthly_sales["order_total_sales"].copy()
+    business_ts = monthly_sales["product_revenue"].copy()
     business_ts.index = pd.DatetimeIndex(business_ts.index)
     business_ts = business_ts.asfreq("MS").ffill()
 
@@ -323,6 +371,28 @@ def run_business_forecast(orders: pd.DataFrame) -> dict:
                 print(f"  War adjustment: {idx.strftime('%b %Y')} "
                       f"${business_ts[idx]:,.0f} -> ${replacement:,.0f}")
                 business_ts[idx] = replacement
+
+    # ── Replace Jan 2025 (delayed shipment anomaly) ──
+    # A late-December shipment arrival inflated Jan 2025 revenue well above
+    # normal January levels ($3.6K in 2023/2024). Replace with average of
+    # other Januarys plus a growth adjustment to preserve the underlying trend.
+    JAN_2025 = pd.Timestamp("2025-01-01")
+    if JAN_2025 in business_ts.index:
+        other_jans = business_ts[
+            (business_ts.index.month == 1) &
+            (business_ts.index != JAN_2025)
+        ]
+        if len(other_jans) > 0:
+            # Apply growth factor: use ratio of recent 12-month avg to earlier 12-month avg
+            recent_12 = business_ts.iloc[-12:].mean()
+            earlier_12 = business_ts.iloc[-24:-12].mean() if len(business_ts) >= 24 else business_ts.iloc[:12].mean()
+            growth_factor = recent_12 / earlier_12 if earlier_12 > 0 else 1.0
+            replacement = other_jans.mean() * growth_factor
+            original = business_ts[JAN_2025]
+            print(f"  Shipment adjustment: Jan 2025 "
+                  f"${original:,.0f} -> ${replacement:,.0f} "
+                  f"(other Jans avg ${other_jans.mean():,.0f} x {growth_factor:.2f} growth)")
+            business_ts[JAN_2025] = replacement
 
     print(f"  Series: {len(business_ts)} months "
           f"({business_ts.index[0].strftime('%Y-%m')} to {business_ts.index[-1].strftime('%Y-%m')})")
@@ -518,7 +588,28 @@ def run_business_forecast(orders: pd.DataFrame) -> dict:
 
 def run_product_forecasts(product_monthly: pd.DataFrame) -> dict:
     """
-    Runs ETS forecasts for each forecastable product and allocates to variants.
+    STEP 3: PRODUCT-LEVEL UNIT FORECASTS (Tiered ETS)
+    
+    Produces 12-month unit forecasts for each forecastable product, then
+    allocates to variants based on recent sales mix.
+    
+    Approach:
+      - Products must have ≥6 active months and ≥3 nonzero months to qualify.
+      - Tiered model selection based on data availability:
+          Tier 1 (≥24 months): Seasonal ETS with additive seasonality (12-period).
+          Tier 2 (13–23 months): Seasonal-index decomposition — ETS requires 2
+              full seasonal cycles, so instead we estimate a monthly index from
+              1 cycle and apply it to a smoothed demand level.
+          Tier 3 (<13 months): Non-seasonal ETS (trend only, no seasonality).
+          Sparse (<1 unit/month): Trimmed recent mean — no model needed.
+      - All tiers prefer damped trends to avoid explosive extrapolation.
+      - Zero-filling: months with no sales are explicitly filled with zeros
+        before modeling. Without this, ETS treats consecutive nonzero rows as
+        consecutive months, silently corrupting trend and seasonal estimates.
+      - Variant allocation: product-level forecasts are split across variants
+        (colors, sizes) proportionally based on the most recent 6-month sales mix.
+      - Evaluation: seasonal holdout on Jul–Sep peak window. Only products with
+        ≥1 unit/month mean demand and ≥6 months of pre-holdout history are evaluated.
     """
     from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
@@ -822,7 +913,17 @@ def run_product_forecasts(product_monthly: pd.DataFrame) -> dict:
 # ==============================================================================
 
 def run_abc_analysis(product_monthly: pd.DataFrame) -> pd.DataFrame:
-    """Pareto / ABC classification by revenue."""
+    """
+    STEP 4: ABC CLASSIFICATION (Pareto Analysis)
+    
+    Ranks all products by total revenue and classifies them:
+      - Class A: top products contributing 80% of cumulative revenue (highest priority)
+      - Class B: next 15% of cumulative revenue (moderate priority)
+      - Class C: remaining 5% (lowest priority — candidates for discontinuation)
+    
+    This classification drives inventory policy: Class A products receive higher
+    safety stock multipliers (1.2×) to minimize stockout risk.
+    """
     print(f"\n{'='*60}")
     print("STEP 4: ABC CLASSIFICATION")
     print(f"{'='*60}")
@@ -862,7 +963,25 @@ def run_abc_analysis(product_monthly: pd.DataFrame) -> pd.DataFrame:
 # ==============================================================================
 
 def run_inventory_optimization(product_monthly: pd.DataFrame, abc_df: pd.DataFrame) -> pd.DataFrame:
-    """Safety stock, reorder point, and monthly stock recommendations at variant level."""
+    """
+    STEP 5: INVENTORY OPTIMIZATION
+    
+    Calculates safety stock and reorder points at the variant level.
+    
+    Parameters:
+      - Service level: 95% (z-score = 1.65)
+      - Lead time: 14 days
+      - ABC adjustment: Class A gets 1.2× safety stock, Class B 1.0×, Class C 0.8×
+    
+    Demand variability is classified by coefficient of variation (CV):
+      - Low (CV < 0.5): stable demand, lower safety stock needed
+      - Medium (CV 0.5–1.0): moderate variability
+      - High (CV > 1.0): erratic demand, higher safety stock buffers
+    
+    Note: Wholesale demand is included in inventory calculations (unlike the
+    revenue forecast) because the business still needs stock on hand to fulfill
+    wholesale orders regardless of their unpredictable timing.
+    """
     print(f"\n{'='*60}")
     print("STEP 5: INVENTORY OPTIMIZATION")
     print(f"{'='*60}")
