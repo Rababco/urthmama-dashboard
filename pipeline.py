@@ -636,7 +636,7 @@ def run_product_forecasts(product_monthly: pd.DataFrame) -> dict:
     # Zero-fill each product from its first sale month to global_max
     filled_frames = []
     for product in all_products_list:
-        sub = raw_ts[raw_ts["product_title"] == product].set_index("year_month")
+        sub = raw_ts[raw_ts["product_title"] == product][["year_month", "units", "revenue"]].set_index("year_month")
         first_sale = sub.index.min()
         idx = pd.date_range(first_sale, global_max, freq="MS")
         sub = sub.reindex(idx, fill_value=0)
