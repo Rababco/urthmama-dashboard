@@ -1,5 +1,5 @@
 """
-🌍 Urth Mama Analytics Dashboard
+Urth Mama Analytics Dashboard
 MSBA Capstone Project - Rabab Ali Swaidan
 
 With integrated data refresh pipeline.
@@ -24,7 +24,7 @@ import json
 # ==============================================================================
 st.set_page_config(
     page_title="Urth Mama Analytics",
-    page_icon="🌎",
+    page_icon=":earth_americas:",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -64,7 +64,7 @@ def check_password():
         st.image("urth_mama_logo.png", width=150)
 
     st.markdown(
-        "<p style='text-align:center; font-family:Open Sans,sans-serif; "
+        "<p style='text-align:center; font-family:'Courier New',Courier,monospace; "
         "color:#5a9a8f; margin-bottom:24px;'>Enter your credentials to continue</p>",
         unsafe_allow_html=True
     )
@@ -93,23 +93,23 @@ if not check_password():
 # ==============================================================================
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Open+Sans:wght@300;400;600&display=swap');
     .stApp { background: linear-gradient(135deg, #f0f7f4 0%, #e8f4f8 100%); }
-    h1, h2, h3 { font-family: 'Nunito', sans-serif !important; color: #2a9d8f !important; font-weight: 700 !important; }
-    p, span, label, .stMarkdown { font-family: 'Open Sans', sans-serif !important; }
+    h1, h2, h3 { font-family: 'Courier New', Courier, monospace !important; color: #2a9d8f !important; font-weight: 700 !important; }
+    p, span, label, .stMarkdown { font-family: 'Courier New', Courier, monospace !important; }
+    body, .stApp, [class*="css"] { font-family: 'Courier New', Courier, monospace !important; }
     [data-testid="metric-container"] {
         background: linear-gradient(145deg, #ffffff, #f0f7f4);
         border: 1px solid #b8e0d9; border-radius: 16px; padding: 20px;
         box-shadow: 0 4px 15px rgba(42, 157, 143, 0.1);
     }
     [data-testid="metric-container"] label { color: #5a9a8f !important; font-weight: 600 !important; text-transform: uppercase; font-size: 0.75rem !important; }
-    [data-testid="metric-container"] [data-testid="stMetricValue"] { color: #1a6b5f !important; font-family: 'Nunito', sans-serif !important; font-size: 1.8rem !important; font-weight: 700 !important; }
+    [data-testid="metric-container"] [data-testid="stMetricValue"] { color: #1a6b5f !important; font-family: 'Courier New', Courier, monospace !important; font-size: 1.8rem !important; font-weight: 700 !important; }
     [data-testid="stSidebar"] { background: linear-gradient(180deg, #1e6091 0%, #168aad 50%, #2a9d8f 100%); }
     [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3,
     [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label { color: #ffffff !important; }
     [data-testid="stSidebar"] .stSelectbox label, [data-testid="stSidebar"] .stRadio label { color: #d4f1f4 !important; }
     .stTabs [data-baseweb="tab-list"] { gap: 8px; }
-    .stTabs [data-baseweb="tab"] { background: #d4f1f4; border-radius: 8px; color: #1a6b5f; font-family: 'Nunito', sans-serif; font-weight: 600; }
+    .stTabs [data-baseweb="tab"] { background: #d4f1f4; border-radius: 8px; color: #1a6b5f; font-family: 'Courier New', Courier, monospace; font-weight: 600; }
     .stTabs [aria-selected="true"] { background: #2a9d8f !important; color: white !important; }
     hr { border-color: #b8e0d9; }
     
@@ -120,7 +120,7 @@ st.markdown("""
         border-radius: 8px;
         padding: 12px 16px;
         margin: 8px 0;
-        font-family: 'Open Sans', sans-serif;
+        font-family: 'Courier New', Courier, monospace;
     }
     
     /* Logout button fix */
@@ -214,7 +214,7 @@ with st.sidebar:
     page = st.radio(
         "Navigate",
         ["Overview", "Product Classification", "Sales Forecast",
-         "Inventory by Product", "Promotions", "Customers", "Data Refresh"],
+         "Inventory by Product", "New Products", "Promotions", "Customers", "Data Refresh"],
         label_visibility="collapsed"
     )
 
@@ -232,7 +232,7 @@ with st.sidebar:
             st.markdown(f"Orders: **{data['metadata'].get('total_orders', 'N/A'):,}**")
             st.markdown(f"Products forecasted: **{data['metadata'].get('products_forecasted', 'N/A')}**")
     else:
-        st.markdown("⚠️ *No data loaded.*")
+        st.markdown("No data loaded.")
         st.markdown("Go to **Data Refresh** to upload your Shopify export.")
 
     st.markdown("---")
@@ -441,33 +441,28 @@ if page == "Overview":
     else:
         product_orders = data['orders']
 
-    total_revenue = product_orders['order_total_sales'].sum()
     total_orders = len(product_orders)
     avg_order_value = product_orders['order_total_sales'].mean()
     total_products = data['product_monthly']['product_title'].nunique()
     forecast_total = data['business_forecast']['forecast'].sum()
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric("Total Revenue", f"${total_revenue:,.0f}")
-    with col2:
         st.metric("Total Orders", f"{total_orders:,}")
-    with col3:
+    with col2:
         st.metric("Avg Order Value", f"${avg_order_value:.2f}")
-    with col4:
+    with col3:
         st.metric("Active Products", f"{total_products}")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("18-Month Forecast", f"${forecast_total:,.0f}", delta=None)
     with col2:
-        st.metric("Monthly Avg (Forecast)", f"${data['business_forecast']['forecast'].mean():,.0f}")
-    with col3:
         a_products = len(data['abc_class'][data['abc_class']['abc_class'] == 'A'])
         st.metric("Class A Products", f"{a_products}", delta=None)
-    with col4:
+    with col3:
         unique_customers = product_orders['customer_name'].nunique()
         st.metric("Unique Customers", f"{unique_customers:,}", delta=None)
 
@@ -492,7 +487,7 @@ if page == "Overview":
         paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
         xaxis=dict(showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)'),
         yaxis=dict(showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)', title='Revenue ($)'),
-        font=dict(family='Open Sans'), hovermode='x unified'
+        font=dict(family='Courier New, Courier, monospace'), hovermode='x unified'
     )
     st.plotly_chart(fig, use_container_width=True)
 
@@ -506,7 +501,7 @@ if page == "Overview":
         fig = px.pie(abc_summary, values='revenue', names='abc_class', color='abc_class',
                      color_discrete_map={'A': COLORS['class_a'], 'B': COLORS['class_b'], 'C': COLORS['class_c']}, hole=0.4)
         fig.update_layout(height=300, margin=dict(l=20, r=20, t=20, b=20),
-                          paper_bgcolor='rgba(0,0,0,0)', font=dict(family='Open Sans'))
+                          paper_bgcolor='rgba(0,0,0,0)', font=dict(family='Courier New, Courier, monospace'))
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
@@ -525,7 +520,7 @@ if page == "Overview":
                           paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
                           xaxis=dict(showgrid=False),
                           yaxis=dict(showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)'),
-                          font=dict(family='Open Sans'))
+                          font=dict(family='Courier New, Courier, monospace'))
         st.plotly_chart(fig, use_container_width=True)
 
 
@@ -547,10 +542,9 @@ elif page == "Product Classification":
     st.markdown("---")
 
     abc_summary = data['abc_class'].groupby('abc_class').agg(
-        products=('product_title', 'count'), revenue=('total_revenue', 'sum'), units=('total_units', 'sum')
+        products=('product_title', 'count'), units=('total_units', 'sum')
     ).reset_index()
     total_products = abc_summary['products'].sum()
-    total_revenue = abc_summary['revenue'].sum()
 
     col1, col2, col3 = st.columns(3)
     for col, abc in zip([col1, col2, col3], ['A', 'B', 'C']):
@@ -559,10 +553,10 @@ elif page == "Product Classification":
             continue
         row = row.iloc[0]
         with col:
-            color = {'A': '●', 'B': '●', 'C': '○'}[abc]
+            color = {'A': '[A]', 'B': '[B]', 'C': '[C]'}[abc]
             st.markdown(f"### {color} Class {abc}")
             st.metric("Products", f"{row['products']} ({row['products']/total_products*100:.1f}%)")
-            st.metric("Revenue", f"${row['revenue']:,.0f} ({row['revenue']/total_revenue*100:.1f}%)")
+            st.metric("Units Sold", f"{row['units']:,.0f}")
 
     st.markdown("---")
     st.markdown("### Pareto Chart")
@@ -573,31 +567,76 @@ elif page == "Product Classification":
 
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     colors = pareto_df['abc_class'].map({'A': COLORS['class_a'], 'B': COLORS['class_b'], 'C': COLORS['class_c']})
-    fig.add_trace(go.Bar(x=pareto_df['product_index'], y=pareto_df['total_revenue'],
-                         marker_color=colors, name='Revenue',
-                         hovertemplate='%{text}<br>Revenue: $%{y:,.0f}<extra></extra>',
+    fig.add_trace(go.Bar(x=pareto_df['product_index'], y=pareto_df['total_units'],
+                         marker_color=colors, name='Units Sold',
+                         hovertemplate='%{text}<br>Units: %{y:,.0f}<extra></extra>',
                          text=pareto_df['product_title']), secondary_y=False)
     fig.add_trace(go.Scatter(x=pareto_df['product_index'], y=pareto_df['cumulative_pct'],
-                             mode='lines', name='Cumulative %',
+                             mode='lines', name='Cumulative Revenue %',
                              line=dict(color=COLORS['accent'], width=3)), secondary_y=True)
     fig.add_hline(y=80, line_dash="dash", line_color=COLORS['primary'], annotation_text="80%", secondary_y=True)
     fig.add_hline(y=95, line_dash="dash", line_color=COLORS['warning'], annotation_text="95%", secondary_y=True)
     fig.update_layout(height=450, margin=dict(l=20, r=20, t=40, b=20),
                       paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
-                      font=dict(family='Open Sans'),
+                      font=dict(family='Courier New, Courier, monospace'),
                       legend=dict(orientation='h', yanchor='bottom', y=1.02),
                       xaxis=dict(title='Products (ranked by revenue)', showgrid=False))
-    fig.update_yaxes(title_text="Revenue ($)", secondary_y=False, showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)')
-    fig.update_yaxes(title_text="Cumulative %", secondary_y=True, showgrid=False, range=[0, 105])
+    fig.update_yaxes(title_text="Units Sold", secondary_y=False, showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)')
+    fig.update_yaxes(title_text="Cumulative Revenue %", secondary_y=True, showgrid=False, range=[0, 105])
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("### Class A Products (Top Performers)")
+
+    # ── Load raw data to compute % sold on sale per product ──
+    raw_path_abc = None
+    for candidate in ["Sales_Data_Urth Mama.csv", "Sales_Data_Urth_Mama.csv",
+                       os.path.join(DATA_DIR, "_temp_upload.csv")]:
+        if os.path.exists(candidate):
+            raw_path_abc = candidate
+            break
+    if raw_path_abc is None and os.path.exists(DATA_DIR):
+        for f in os.listdir(DATA_DIR):
+            if f.lower().startswith("sales_data") and f.endswith(".csv"):
+                raw_path_abc = os.path.join(DATA_DIR, f)
+
+    sale_pct_by_product = {}
+    if raw_path_abc:
+        @st.cache_data
+        def compute_sale_pct(path, _bust=""):
+            raw = pd.read_csv(path)
+            raw.columns = raw.columns.str.strip().str.lower().str.replace(" ", "_", regex=False)
+            raw["orders"] = pd.to_numeric(raw.get("orders", raw.get("net_items_sold", 0)), errors="coerce").fillna(0)
+            raw["discount_value"] = pd.to_numeric(raw.get("discount_value", raw.get("discounts", 0)), errors="coerce").fillna(0)
+            prod_raw = raw[raw["product_title"].notna() & (raw["orders"] > 0)].copy()
+            # Exclude known wholesale customers — their discounts are B2B pricing, not promotions
+            WHOLESALE_CUSTOMERS = [
+                "safa awad", "wholesale ambefrul", "ambefrul", "samira",
+                "rasha yassine", "fatima fadel", "imad play one",
+                "wholesale trendy kids", "trendy kids"
+            ]
+            if "customer_name" in prod_raw.columns:
+                prod_raw["_cust_lower"] = prod_raw["customer_name"].fillna("").str.strip().str.lower()
+                prod_raw = prod_raw[~prod_raw["_cust_lower"].apply(
+                    lambda c: any(w in c for w in WHOLESALE_CUSTOMERS)
+                )]
+            # An order line is "on sale" if discount_value > 0
+            prod_raw["on_sale"] = prod_raw["discount_value"] > 0
+            result = prod_raw.groupby("product_title").apply(
+                lambda g: round(g["on_sale"].sum() / len(g) * 100, 1)
+            ).to_dict()
+            return result
+
+        sale_pct_by_product = compute_sale_pct(raw_path_abc, _bust=st.session_state.get("last_refresh", ""))
+
     class_a = data['abc_class'][data['abc_class']['abc_class'] == 'A'][
-        ['product_title', 'total_revenue', 'total_units', 'cumulative_pct']].copy()
-    class_a.columns = ['Product', 'Revenue', 'Units Sold', 'Cumulative %']
-    class_a['Revenue'] = class_a['Revenue'].apply(lambda x: f"${x:,.0f}")
+        ['product_title', 'total_units', 'cumulative_pct']].copy()
+    class_a['% Sold on Sale'] = class_a['product_title'].map(
+        lambda p: f"{sale_pct_by_product.get(p, 0):.1f}%" if sale_pct_by_product else "N/A"
+    )
+    class_a.columns = ['Product', 'Units Sold', 'Cumulative %', '% Sold on Sale']
     class_a['Cumulative %'] = class_a['Cumulative %'].apply(lambda x: f"{x:.1f}%")
     st.dataframe(class_a, use_container_width=True, hide_index=True)
+    st.caption("*% Sold on Sale* = share of line items for this product that had a discount applied.")
 
 # ==============================================================================
 # PAGE: SALES FORECAST
@@ -658,7 +697,7 @@ elif page == "Sales Forecast":
         paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
         xaxis=dict(showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)', title=''),
         yaxis=dict(showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)', title='Revenue ($)'),
-        font=dict(family='Open Sans'),
+        font=dict(family='Courier New, Courier, monospace'),
         legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
         hovermode='x unified'
     )
@@ -669,7 +708,7 @@ elif page == "Sales Forecast":
         wholesale_monthly = int(wholesale_total / 18)
         wholesale_total_int = int(wholesale_total)
         st.info(
-            f"📦 Wholesale Revenue Note: In addition to the retail forecast shown above, "
+            f"Wholesale Revenue Note: In addition to the retail forecast shown above, "
             f"an estimated {wholesale_total_int:,} USD in wholesale revenue is expected "
             f"over the 18-month forecast period (approximately {wholesale_monthly:,} USD per month on average). "
             f"Wholesale orders are large B2B transactions with unpredictable timing, "
@@ -732,7 +771,7 @@ elif page == "Sales Forecast":
 
     table_html = (
         '<div style="overflow-x:auto;border-radius:12px;border:1px solid #b8e0d9;">'
-        '<table style="width:100%;border-collapse:collapse;font-family:Open Sans,sans-serif;font-size:14px;">'
+        '<table style="width:100%;border-collapse:collapse;font-family:Courier New,Courier,monospace;font-size:14px;">'
         f'<thead>{header}</thead>'
         f'<tbody>{rows_html}</tbody>'
         '</table></div>'
@@ -740,6 +779,8 @@ elif page == "Sales Forecast":
 
     import streamlit.components.v1 as components
     components.html(table_html, height=len(display_df) * 38 + 60, scrolling=False)
+
+    st.caption("Note: These figures represent gross sales revenue only. They do not account for product costs, shipping costs, marketing spend, or any other operating expenses. Profitability analysis requires cost data not included in this dataset.")
 
 
 
@@ -813,17 +854,13 @@ elif page == "Inventory by Product":
     product_hist.columns = ['date', 'actual']
 
     # ── KPI Row ──
-    cc = {'A': '●', 'B': '●', 'C': '○'}.get(abc_class, '○')
-    col1, col2, col3, col4, col5 = st.columns(5)
+    cc = {'A': '[A]', 'B': '[B]', 'C': '[C]'}.get(abc_class, '[?]')
+    col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("ABC Class", f"{cc} {abc_class}")
     with col2:
-        st.metric("Total Revenue", f"${total_rev:,.0f}")
-    with col3:
         st.metric("Units Sold", f"{total_units:,.0f}")
-    with col4:
-        st.metric("Revenue Share", f"{rev_pct:.2f}%")
-    with col5:
+    with col3:
         st.metric("12-Mo Forecast", f"{int(product_fc['forecast_units'].sum()):,} units")
 
     st.markdown("---")
@@ -854,7 +891,7 @@ elif page == "Inventory by Product":
         paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
         xaxis=dict(showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)'),
         yaxis=dict(showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)', title='Units'),
-        font=dict(family='Open Sans'), title=forecast_label,
+        font=dict(family='Courier New, Courier, monospace'), title=forecast_label,
         legend=dict(orientation='h', yanchor='bottom', y=1.02), hovermode='x unified'
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -973,7 +1010,7 @@ elif page == "Inventory by Product":
                 paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
                 xaxis=dict(title='Forecast Units', showgrid=True, gridcolor='rgba(42,157,143,0.1)'),
                 yaxis=dict(autorange='reversed', showgrid=False),
-                font=dict(family='Open Sans')
+                font=dict(family='Courier New, Courier, monospace')
             )
             st.plotly_chart(fig2, use_container_width=True)
 
@@ -1027,296 +1064,856 @@ elif page == "Inventory by Product":
 
 
 
+
 # ==============================================================================
-# PAGE: PROMOTIONS ANALYSIS (streamlined)
+# PAGE: NEW PRODUCTS
 # ==============================================================================
-elif page == "Promotions":
-    st.markdown("# Promotions & Discount Analysis")
-    st.markdown("*Analysis of discount activity and promotional impact*")
+elif page == "New Products":
+    st.markdown("# New Products")
+    st.markdown("*Performance evaluation of products introduced in the second half of 2025*")
     st.markdown("---")
 
-    # We need line-item level data with discount info — rebuild from orders
-    raw_path = None
+    st.markdown("""
+**How to read this section**
+
+Three retail metrics are used to evaluate each newly introduced product:
+
+- **Sell-Through Rate (STR):** Units sold as a percentage of initial stock ordered. The standard retail benchmark is 80% sell-through within the first season (~3 months). Above 80% is strong; below 40% warrants review.
+- **Monthly Velocity:** Average units sold per month since introduction. Useful for comparing products introduced at different times on equal footing.
+- **Days of Supply Remaining:** At the current monthly velocity, how many days of stock are left. Below 30 days is a reorder signal; above 180 days suggests slow movement.
+""")
+    st.markdown("---")
+
+    # ── Load sales data ──
+    NEW_PROD_RAW = None
     for candidate in ["Sales_Data_Urth Mama.csv", "Sales_Data_Urth_Mama.csv",
                        os.path.join(DATA_DIR, "_temp_upload.csv")]:
         if os.path.exists(candidate):
-            raw_path = candidate
+            NEW_PROD_RAW = candidate
             break
-    for f in os.listdir(DATA_DIR) if os.path.exists(DATA_DIR) else []:
-        if f.lower().startswith("sales_data") and f.endswith(".csv"):
-            raw_path = os.path.join(DATA_DIR, f)
+    if NEW_PROD_RAW is None and os.path.exists(DATA_DIR):
+        for f in os.listdir(DATA_DIR):
+            if f.lower().startswith("sales_data") and f.endswith(".csv"):
+                NEW_PROD_RAW = os.path.join(DATA_DIR, f)
 
-    if raw_path is None:
-        st.warning("Raw Shopify CSV not found. Place your Sales_Data file in the project folder to enable promotions analysis.")
+    # ── Inventory file upload ──
+    with st.expander("Upload new products inventory file (if not auto-detected)", expanded=False):
+        inv_up = st.file_uploader("Newly Introduced Products Excel (.xlsx)", type="xlsx", key="newprod_inv")
+
+    NEW_PROD_INV = os.path.join(DATA_DIR, "Newly_introduced_products.xlsx")
+
+    @st.cache_data
+    def load_new_product_inventory(inv_bytes, _bust=""):
+        import io
+        # Hardcoded clean parse of the structured inventory file
+        # (the raw Excel is a multi-section format; we parse it explicitly)
+        records = [
+            # product_title, variant, intro_month, initial_stock
+            ("OmieBox Pastel", "Pixie Pink",        "2025-08-01", 36),
+            ("OmieBox Pastel", "Sea Blue",           "2025-08-01", 36),
+            ("OmieBox Pastel", "Apple Green",        "2025-08-01", 24),
+            ("OmieBox Pastel", "Lilac Purple",       "2025-08-01", 36),
+            ("OmieBox Pastel", "Popp Orange",        "2025-08-01", 24),
+            # Nov restock
+            ("OmieBox Pastel", "Pixie Pink",         "2025-11-01", 216),
+            ("OmieBox Pastel", "Sea Blue",           "2025-11-01", 216),
+            ("OmieBox Pastel", "Apple Green",        "2025-11-01", 102),
+            ("OmieBox Pastel", "Lilac Purple",       "2025-11-01", 216),
+            ("OmieBox Pastel", "Popp Orange",        "2025-11-01", 102),
+            # Yumbox Tapas 5C — Sep
+            ("Yumbox Tapas 5 Compartments (Large)", "Malibu Purple",     "2025-09-01", 12),
+            ("Yumbox Tapas 5 Compartments (Large)", "Palm Green",        "2025-09-01", 12),
+            ("Yumbox Tapas 5 Compartments (Large)", "Monte Carlo Blue",  "2025-09-01", 24),
+            # Yumbox Tapas 4C — Sep
+            ("Yumbox Tapas 4 Compartments (Large)", "Monte Carlo Blue",  "2025-09-01", 24),
+            ("Yumbox Tapas 4 Compartments (Large)", "Capri Pink Rainbow","2025-09-01", 36),
+            ("Yumbox Tapas 4 Compartments (Large)", "Hazy Blue",        "2025-09-01", 12),
+            ("Yumbox Tapas 4 Compartments (Large)", "Seville Purple",    "2025-09-01", 36),
+            # MontiiCo 700ml — Oct
+            ("MontiiCo 700ml Water Bottle", "Floss",   "2025-10-01", 50),
+            ("MontiiCo 700ml Water Bottle", "Midnight","2025-10-01", 50),
+            ("MontiiCo 700ml Water Bottle", "Splash",  "2025-10-01", 50),
+            ("MontiiCo 700ml Water Bottle", "Fuschia", "2025-10-01", 25),
+            # MontiiCo 475ml — Oct + Dec
+            ("MontiiCo 475ml Water Bottle", "Floss",   "2025-10-01", 25),
+            ("MontiiCo 475ml Water Bottle", "Fuschia", "2025-10-01", 25),
+            ("MontiiCo 475ml Water Bottle", "Splash",  "2025-10-01", 25),
+            ("MontiiCo 475ml Water Bottle", "Matcha",  "2025-10-01", 25),
+            ("MontiiCo 475ml Water Bottle", "Lilac",   "2025-12-01", 50),
+            # MontiiCo 350ml — Oct + Dec
+            ("MontiiCo 350ml Water Bottle", "Splash",  "2025-10-01", 25),
+            ("MontiiCo 350ml Water Bottle", "Floss",   "2025-10-01", 25),
+            ("MontiiCo 350ml Water Bottle", "Matcha",  "2025-10-01", 25),
+            ("MontiiCo 350ml Water Bottle", "Lilac",   "2025-12-01", 25),
+            # MontiiCo Feast Lunchbox — Dec
+            ("MontiiCo Feast Lunchbox", "Splash", "2025-12-01", 60),
+            ("MontiiCo Feast Lunchbox", "Lilac",  "2025-12-01", 60),
+            # MontiiCo Mini Food Jar — Dec
+            ("MontiiCo Mini Food Jar", "Floss",  "2025-12-01", 25),
+            ("MontiiCo Mini Food Jar", "Splash", "2025-12-01", 25),
+            ("MontiiCo Mini Food Jar", "Lilac",  "2025-12-01", 25),
+            ("MontiiCo Mini Food Jar", "Marine", "2025-12-01", 25),
+            # MontiiCo Food Jar 400ml — Dec
+            ("MontiiCo Food Jar 400ml", "Floss",  "2025-12-01", 25),
+            ("MontiiCo Food Jar 400ml", "Lilac",  "2025-12-01", 25),
+            ("MontiiCo Food Jar 400ml", "Splash", "2025-12-01", 25),
+        ]
+        inv = pd.DataFrame(records, columns=["product_title", "variant", "intro_date", "stock"])
+        inv["intro_date"] = pd.to_datetime(inv["intro_date"])
+        # First-batch stock only (for sell-through denominator — exclude restocks)
+        first_batch = inv[inv["intro_date"] <= pd.Timestamp("2025-10-01")].groupby("product_title")
+        first_stock = inv.groupby(["product_title", "intro_date"])["stock"].sum().reset_index()
+        # Total stock ever ordered per product
+        total_stock = inv.groupby("product_title")["stock"].sum().reset_index()
+        total_stock.rename(columns={"stock": "total_stock_ordered"}, inplace=True)
+        # First intro date per product
+        first_intro = inv.groupby("product_title")["intro_date"].min().reset_index()
+        result = first_intro.merge(total_stock, on="product_title")
+        return result, inv
+
+    inv_bytes_data = inv_up.read() if inv_up else None
+    inv_summary, inv_detail = load_new_product_inventory(
+        inv_bytes_data, _bust=st.session_state.get("last_refresh", "")
+    )
+
+    if NEW_PROD_RAW is None:
+        st.warning("Sales CSV not found. Place your Shopify export in the project folder.")
         st.stop()
 
     @st.cache_data
-    def load_promo_data(path, _bust=""):
-        df = pd.read_csv(path)
+    def load_new_prod_sales(raw_path, _bust=""):
+        df = pd.read_csv(raw_path)
         df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_", regex=False)
         df["day"] = pd.to_datetime(df["day"], errors="coerce")
-        for c in ["orders", "gross_sales", "net_sales", "total_sales", "discount_value"]:
-            if c in df.columns:
-                df[c] = pd.to_numeric(df[c], errors="coerce")
-        df["discount_value"] = df["discount_value"].fillna(0)
-        df["gross_sales"]    = df["gross_sales"].fillna(0)
-        df["net_sales"]      = df["net_sales"].fillna(0)
+        df["orders"] = pd.to_numeric(df.get("orders", df.get("net_items_sold", 0)), errors="coerce").fillna(0)
+        df["net_sales"] = pd.to_numeric(df.get("net_sales", 0), errors="coerce").fillna(0)
+        return df[df["product_title"].notna() & (df["orders"] > 0)]
 
-        df["orders_qty"] = pd.to_numeric(df["orders"], errors="coerce").fillna(0)
-        prod = df[df["product_title"].notna() & (df["orders_qty"] > 0)].copy()
+    raw_sales = load_new_prod_sales(NEW_PROD_RAW, _bust=st.session_state.get("last_refresh", ""))
+    DATA_END = pd.Timestamp("2025-12-31")
 
-        def categorize(name):
-            if pd.isna(name):
-                return "No Discount"
-            n = str(name).strip().lower()
-            if not n or n == "nan":
-                return "No Discount"
-            if any(k in n for k in ["gift", "freebie", "free ", "pr "]):
-                return "Gift/Freebie"
-            if any(k in n for k in ["influencer", "collab", "ambassador"]):
-                return "Influencer/Collab"
-            if any(k in n for k in ["wholesale", "retail"]):
-                return "Wholesale"
-            if any(k in n for k in ["warranty", "exchange", "return", "refund", "damage"]):
-                return "Warranty/Exchange"
-            if any(k in n for k in ["friend", "family", "employee"]):
-                return "Friends & Family"
-            if any(k in n for k in ["giveaway", "raffle", "contest"]):
-                return "Giveaway"
-            if any(k in n for k in ["instagram", "tag", "coupon"]):
-                return "Social Media Promo"
-            if any(k in n for k in ["sale", "offer", "promotion", "omieoff", "honoring"]):
-                return "Sale/Promotion"
-            if any(k in n for k in ["balance", "paid in", "old", "ordered befor", "ordered before", "exception", "custom", "discount", "20 off", "20off", "bundle", "special"]):
-                return "Operational"
-            return "Other"
+    # ── Build performance table ──
+    rows = []
+    for _, prod_row in inv_summary.iterrows():
+        product = prod_row["product_title"]
+        intro_date = prod_row["intro_date"]
+        total_ordered = prod_row["total_stock_ordered"]
 
-        prod["discount_category"] = prod["discount_name"].apply(categorize)
-        prod["year_month"] = prod["day"].dt.to_period("M").dt.to_timestamp()
+        # Only count sales from intro date onwards
+        psales = raw_sales[
+            (raw_sales["product_title"] == product) &
+            (raw_sales["day"] >= intro_date)
+        ]
+        units_sold = psales["orders"].sum()
 
-        def pick_order_discount(g):
-            named = g[(g["discount_name"].notna()) & (g["discount_value"] > 0)]
-            if len(named) > 0:
-                return named.iloc[0]["discount_value"]
-            return 0.0
-
-        order_disc_map = prod.groupby("order_name").apply(pick_order_discount)
-        prod["order_discount"] = prod["order_name"].map(order_disc_map).fillna(0)
-
-        first_disc_row = (
-            prod[prod["order_discount"] > 0]
-            .groupby("order_name")
-            .apply(lambda g: g[(g["discount_name"].notna()) & (g["discount_value"] > 0)].index[0]
-                   if len(g[(g["discount_name"].notna()) & (g["discount_value"] > 0)]) > 0
-                   else g.index[0])
-        )
-        prod["is_first_disc_row"] = prod.index.isin(first_disc_row.values)
-        prod["discount_deduped"] = prod.apply(
-            lambda r: r["order_discount"] if r["is_first_disc_row"] else 0.0, axis=1
-        )
-
-        return prod
-
-    promo = load_promo_data(raw_path, _bust=st.session_state.get("last_refresh", ""))
-
-    # ── KPI Row ──
-    total_orders      = promo["order_name"].nunique()
-    discounted_orders = promo[promo["discount_category"] != "No Discount"]["order_name"].nunique()
-    total_discount_given = promo["discount_deduped"].sum()
-    marketing_cats = ["Sale/Promotion", "Influencer/Collab", "Social Media Promo", "Giveaway", "Wholesale"]
-    marketing_rev  = promo[promo["discount_category"].isin(marketing_cats)]["net_sales"].sum()
-
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.metric("Total Orders", f"{total_orders:,}")
-    with col2:
-        st.metric("Orders with Discounts", f"{discounted_orders:,}", delta=f"{discounted_orders/total_orders*100:.1f}%")
-    with col3:
-        st.metric("Total Discounts Given", f"${total_discount_given:,.0f}")
-    with col4:
-        st.metric("Promotional Revenue", f"${marketing_rev:,.0f}")
-
-    st.markdown("---")
-
-    # ── Discount Category Breakdown (consolidated into one chart) ──
-    st.markdown("### Discount Breakdown by Purpose")
-
-    group_map = {
-        "Sale/Promotion":    "Marketing",
-        "Influencer/Collab": "Marketing",
-        "Social Media Promo":"Marketing",
-        "Giveaway":          "Marketing",
-        "Wholesale":         "Marketing",
-        "Warranty/Exchange": "Operational / Warranty",
-        "Operational":       "Operational / Warranty",
-        "Gift/Freebie":      "Gifts & Freebies",
-        "Friends & Family":  "Gifts & Freebies",
-        "No Discount":       "No Discount",
-        "Other":             "Other",
-    }
-    group_colors = {
-        "Marketing":              COLORS['primary'],
-        "Operational / Warranty": COLORS['secondary'],
-        "Gifts & Freebies":       COLORS['warning'],
-        "Other":                  COLORS['class_c'],
-    }
-
-    promo["discount_group"] = promo["discount_category"].map(group_map).fillna("Other")
-
-    grp = promo[
-        (promo["discount_group"] != "No Discount") &
-        (promo["discount_deduped"] > 0)
-    ].groupby("discount_group").agg(
-        orders=("order_name", "nunique"),
-        discount_given=("discount_deduped", "sum")
-    ).reset_index().sort_values("discount_given", ascending=True)
-
-    # Single consolidated horizontal bar showing both orders and discount value
-    fig = make_subplots(rows=1, cols=2, subplot_titles=("By Order Count", "By Discount Value ($)"),
-                        shared_yaxes=True, horizontal_spacing=0.12)
-    fig.add_trace(go.Bar(
-        x=grp["orders"], y=grp["discount_group"], orientation="h",
-        marker_color=[group_colors.get(g, COLORS['class_c']) for g in grp["discount_group"]],
-        text=grp["orders"].apply(lambda x: f"{x:,}"), textposition="outside",
-        showlegend=False
-    ), row=1, col=1)
-    fig.add_trace(go.Bar(
-        x=grp["discount_given"], y=grp["discount_group"], orientation="h",
-        marker_color=[group_colors.get(g, COLORS['class_c']) for g in grp["discount_group"]],
-        text=grp["discount_given"].apply(lambda x: f"${x:,.0f}"), textposition="outside",
-        showlegend=False
-    ), row=1, col=2)
-    fig.update_layout(
-        height=300, margin=dict(l=20, r=100, t=40, b=20),
-        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="Open Sans")
-    )
-    fig.update_xaxes(showgrid=True, gridcolor="rgba(42,157,143,0.1)")
-    fig.update_yaxes(showgrid=False)
-    st.plotly_chart(fig, use_container_width=True)
-
-    st.markdown("---")
-
-    # ── Monthly Promotional Impact ──
-    st.markdown("### Monthly Promotional Impact")
-
-    promo["is_marketing"] = promo["discount_category"].isin(marketing_cats)
-
-    monthly_promo = promo.groupby("year_month").agg(
-        total_revenue=("net_sales", "sum"),
-        total_orders=("order_name", "nunique"),
-        promo_revenue=("net_sales", lambda x: x[promo.loc[x.index, "is_marketing"]].sum()),
-        promo_orders=("is_marketing", "sum"),
-        discount_given=("discount_deduped", "sum")
-    ).reset_index()
-
-    monthly_promo["organic_revenue"] = monthly_promo["total_revenue"] - monthly_promo["promo_revenue"]
-
-    fig = go.Figure()
-    fig.add_trace(go.Bar(
-        x=monthly_promo["year_month"], y=monthly_promo["organic_revenue"],
-        name="Organic Revenue", marker_color=COLORS['primary']
-    ))
-    fig.add_trace(go.Bar(
-        x=monthly_promo["year_month"], y=monthly_promo["promo_revenue"],
-        name="Promotional Revenue", marker_color=COLORS['accent']
-    ))
-    fig.add_trace(go.Scatter(
-        x=monthly_promo["year_month"], y=monthly_promo["discount_given"],
-        name="Discounts Given", mode="lines+markers",
-        line=dict(color=COLORS['warning'], width=2, dash="dot"),
-        yaxis="y2"
-    ))
-
-    fig.update_layout(
-        barmode="stack", height=450,
-        margin=dict(l=20, r=60, t=40, b=20),
-        paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
-        xaxis=dict(showgrid=False),
-        yaxis=dict(title="Revenue ($)", showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)'),
-        yaxis2=dict(title="Discounts Given ($)", overlaying="y", side="right", showgrid=False),
-        font=dict(family='Open Sans'),
-        legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
-        hovermode='x unified'
-    )
-    st.plotly_chart(fig, use_container_width=True)
-
-    st.markdown("---")
-
-    # ── Top Promotional Events ──
-    st.markdown("### Top Promotional Events")
-    st.markdown("*Top 5 sale/promotion events by revenue generated*")
-
-    sale_promos = promo[promo["discount_category"] == "Sale/Promotion"].copy()
-    if len(sale_promos) > 0:
-        sale_promos["clean_name"] = sale_promos["discount_name"].str.strip()
-        event_table = sale_promos.groupby("clean_name").agg(
-            Orders=("order_name", "nunique"),
-            Start=("day", "min"),
-            End=("day", "max"),
-            Revenue=("net_sales", "sum"),
-            Discount=("discount_deduped", "sum")
-        ).sort_values("Revenue", ascending=False).head(5).reset_index()
-        event_table.columns = ["Promotion", "Orders", "Start", "End", "Revenue", "Discount Given"]
-
-        fig = go.Figure(go.Bar(
-            x=event_table["Revenue"],
-            y=event_table["Promotion"],
-            orientation="h",
-            marker_color=COLORS['accent'],
-            text=event_table["Revenue"].apply(lambda x: f"${x:,.0f}"),
-            textposition="outside",
-            customdata=event_table[["Orders", "Discount Given"]],
-            hovertemplate="<b>%{y}</b><br>Revenue: $%{x:,.0f}<br>Orders: %{customdata[0]}<br>Discount Given: $%{customdata[1]:,.0f}<extra></extra>"
+        # Months active: from intro to data end
+        months_active = max(1, round(
+            (DATA_END - intro_date).days / 30.44, 1
         ))
-        fig.update_layout(
-            height=300, margin=dict(l=20, r=120, t=20, b=20),
-            paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-            xaxis=dict(title="Revenue ($)", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
-            yaxis=dict(autorange="reversed", showgrid=False),
-            font=dict(family="Open Sans")
-        )
-        st.plotly_chart(fig, use_container_width=True)
+
+        sell_through = units_sold / total_ordered * 100 if total_ordered > 0 else 0
+        monthly_velocity = units_sold / months_active
+        remaining_stock = max(0, total_ordered - units_sold)
+        days_of_supply = (remaining_stock / monthly_velocity * 30) if monthly_velocity > 0 else 999
+
+        # Signal classification
+        if months_active <= 2 and sell_through >= 50:
+            signal = "Reorder Now"
+        elif sell_through >= 80:
+            signal = "Reorder Now"
+        elif sell_through >= 40:
+            signal = "Watch"
+        elif intro_date >= pd.Timestamp("2025-12-01"):
+            signal = "Too Early"
+        else:
+            signal = "Slow Mover"
+
+        rows.append({
+            "Product": product,
+            "Introduced": intro_date.strftime("%b %Y"),
+            "Months Active": round(months_active, 1),
+            "Total Ordered": int(total_ordered),
+            "Units Sold": int(units_sold),
+            "Remaining Stock": int(remaining_stock),
+            "Sell-Through %": round(sell_through, 1),
+            "Units / Month": round(monthly_velocity, 1),
+            "Days of Supply": int(min(days_of_supply, 999)),
+            "Signal": signal,
+        })
+
+    perf_df = pd.DataFrame(rows).sort_values("Sell-Through %", ascending=False)
+
+    # ── KPI summary row ──
+    reorder_count = (perf_df["Signal"] == "Reorder Now").sum()
+    watch_count   = (perf_df["Signal"] == "Watch").sum()
+    slow_count    = (perf_df["Signal"] == "Slow Mover").sum()
+    total_units_sold = perf_df["Units Sold"].sum()
+
+    c1, c2, c3, c4 = st.columns(4)
+    with c1: st.metric("New Products Tracked", f"{len(perf_df)}")
+    with c2: st.metric("Reorder Signals", f"{reorder_count}", delta="products above threshold")
+    with c3: st.metric("Total Units Sold", f"{total_units_sold:,}")
+    with c4: st.metric("Slow Movers", f"{slow_count}")
 
     st.markdown("---")
 
-    # ── Promotional Lift (KPIs only — no redundant bar charts) ──
-    st.markdown("### Promotional Lift")
-    st.markdown("*Comparing average daily revenue and order value on days with active promotions vs. days without*")
+    # ── Sell-Through Bar Chart ──
+    st.markdown("### Sell-Through Rate by Product")
+    st.markdown("*Retail benchmark: 80% within first season (~3 months). Above 50% within 2 months = strong early signal.*")
 
-    promo["date"] = promo["day"].dt.date
-    daily = promo.groupby("date").agg(
-        revenue=("net_sales", "sum"),
-        orders=("order_name", "nunique"),
-        has_promo=("discount_category", lambda x: int((x != "No Discount").any()))
-    ).reset_index()
-    daily["aov"] = daily["revenue"] / daily["orders"].replace(0, np.nan)
+    signal_colors = {
+        "Reorder Now": COLORS["primary"],
+        "Watch":       COLORS["warning"],
+        "Slow Mover":  COLORS["accent"],
+        "Too Early":   COLORS["class_c"],
+    }
+    bar_colors = [signal_colors[s] for s in perf_df["Signal"]]
 
-    promo_days     = daily[daily["has_promo"] == 1]
-    no_promo_days  = daily[daily["has_promo"] == 0]
+    fig = go.Figure(go.Bar(
+        x=perf_df["Sell-Through %"],
+        y=perf_df["Product"],
+        orientation="h",
+        marker_color=bar_colors,
+        text=perf_df["Sell-Through %"].apply(lambda x: f"{x:.0f}%"),
+        textposition="outside",
+        customdata=perf_df[["Units Sold", "Total Ordered", "Signal"]].values,
+        hovertemplate="<b>%{y}</b><br>Sell-Through: %{x:.1f}%<br>Sold: %{customdata[0]} / %{customdata[1]} units<br>Signal: %{customdata[2]}<extra></extra>"
+    ))
+    fig.add_vline(x=80, line_dash="dash", line_color=COLORS["primary"],
+                  annotation_text="80% benchmark", annotation_position="top right")
+    fig.add_vline(x=50, line_dash="dot", line_color=COLORS["warning"],
+                  annotation_text="50% early signal", annotation_position="top left")
+    fig.update_layout(
+        height=max(300, len(perf_df) * 46 + 60),
+        margin=dict(l=10, r=80, t=40, b=10),
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        xaxis=dict(title="Sell-Through Rate (%)", showgrid=True,
+                   gridcolor="rgba(42,157,143,0.1)", range=[0, max(perf_df["Sell-Through %"].max() * 1.2, 110)]),
+        yaxis=dict(autorange="reversed", showgrid=False),
+        font=dict(family="Courier New, Courier, monospace")
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
-    avg_rev_promo    = promo_days["revenue"].mean()
-    avg_rev_nopromo  = no_promo_days["revenue"].mean()
-    avg_aov_promo    = promo_days["aov"].mean()
-    avg_aov_nopromo  = no_promo_days["aov"].mean()
-    rev_lift = (avg_rev_promo - avg_rev_nopromo) / avg_rev_nopromo * 100 if avg_rev_nopromo else 0
-
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.metric("Avg Daily Rev — Promo Days", f"${avg_rev_promo:,.0f}")
-    with col2:
-        st.metric("Avg Daily Rev — No Promo", f"${avg_rev_nopromo:,.0f}")
-    with col3:
-        st.metric("Revenue Lift", f"+{rev_lift:.0f}%" if rev_lift > 0 else f"{rev_lift:.0f}%",
-                  delta=f"${avg_rev_promo - avg_rev_nopromo:,.0f}/day")
-    with col4:
-        aov_diff = avg_aov_promo - avg_aov_nopromo
-        st.metric("AOV Difference", f"${aov_diff:+,.0f}",
-                  delta=f"Promo ${avg_aov_promo:,.0f} vs Full ${avg_aov_nopromo:,.0f}")
+    # ── Legend ──
+    leg_col1, leg_col2, leg_col3, leg_col4 = st.columns(4)
+    with leg_col1: st.markdown(f"<span style='color:{COLORS['primary']};font-weight:600;font-family:Courier New'>Reorder Now</span> — STR >= 80% or >= 50% within 2 months", unsafe_allow_html=True)
+    with leg_col2: st.markdown(f"<span style='color:{COLORS['warning']};font-weight:600;font-family:Courier New'>Watch</span> — STR 40–79%, monitor closely", unsafe_allow_html=True)
+    with leg_col3: st.markdown(f"<span style='color:{COLORS['accent']};font-weight:600;font-family:Courier New'>Slow Mover</span> — STR < 40% after sufficient time", unsafe_allow_html=True)
+    with leg_col4: st.markdown(f"<span style='color:{COLORS['class_c']};font-weight:600;font-family:Courier New'>Too Early</span> — Introduced Dec 2025, insufficient data", unsafe_allow_html=True)
 
     st.markdown("---")
 
-    
+    # ── Monthly Velocity Chart ──
+    st.markdown("### Monthly Sales Velocity")
+    st.markdown("*Average units sold per month since introduction — comparable across products with different intro dates*")
+
+    vel_df = perf_df[perf_df["Signal"] != "Too Early"].sort_values("Units / Month", ascending=True)
+    fig2 = go.Figure(go.Bar(
+        x=vel_df["Units / Month"],
+        y=vel_df["Product"],
+        orientation="h",
+        marker_color=[signal_colors[s] for s in vel_df["Signal"]],
+        text=vel_df["Units / Month"].apply(lambda x: f"{x:.1f} units/mo"),
+        textposition="outside",
+        hovertemplate="<b>%{y}</b><br>%{x:.1f} units/month<extra></extra>"
+    ))
+    fig2.update_layout(
+        height=max(250, len(vel_df) * 46 + 60),
+        margin=dict(l=10, r=100, t=20, b=10),
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        xaxis=dict(title="Units per Month", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+        yaxis=dict(autorange="reversed", showgrid=False),
+        font=dict(family="Courier New, Courier, monospace")
+    )
+    st.plotly_chart(fig2, use_container_width=True)
+
+    st.markdown("---")
+
+    # ── Monthly sales trend per product ──
+    st.markdown("### Monthly Sales Trend")
+    st.markdown("*Select a product to see its month-by-month sales trajectory since introduction*")
+
+    trackable = perf_df[perf_df["Signal"] != "Too Early"]["Product"].tolist()
+    selected_new = st.selectbox("Select product", options=trackable, index=0, key="new_prod_select")
+
+    if selected_new:
+        intro_dt = inv_summary[inv_summary["product_title"] == selected_new]["intro_date"].values[0]
+        intro_dt = pd.Timestamp(intro_dt)
+        psales_monthly = raw_sales[
+            (raw_sales["product_title"] == selected_new) &
+            (raw_sales["day"] >= intro_dt)
+        ].copy()
+        psales_monthly["year_month"] = psales_monthly["day"].dt.to_period("M").dt.to_timestamp()
+        monthly_trend = psales_monthly.groupby("year_month").agg(
+            units=("orders", "sum")
+        ).reset_index()
+
+        if len(monthly_trend) > 0:
+            fig3 = go.Figure()
+            fig3.add_trace(go.Bar(
+                x=monthly_trend["year_month"], y=monthly_trend["units"],
+                marker_color=COLORS["primary"],
+                text=monthly_trend["units"].apply(lambda x: f"{x:.0f}"),
+                textposition="outside",
+                hovertemplate="%{x|%b %Y}<br>Units: %{y}<extra></extra>"
+            ))
+            # Add total stock line as reference
+            total_ord = int(inv_summary[inv_summary["product_title"] == selected_new]["total_stock_ordered"].values[0])
+            fig3.update_layout(
+                height=320, margin=dict(l=10, r=10, t=30, b=10),
+                paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                xaxis=dict(showgrid=False),
+                yaxis=dict(title="Units Sold", showgrid=True,
+                           gridcolor="rgba(42,157,143,0.1)"),
+                font=dict(family="Courier New, Courier, monospace"),
+                title=f"{selected_new} — monthly sales since introduction"
+            )
+            st.plotly_chart(fig3, use_container_width=True)
+        else:
+            st.info("No monthly sales data found for this product yet.")
+
+    st.markdown("---")
+
+    # ── Full data table ──
+    st.markdown("### Full Performance Table")
+    display_table = perf_df.copy()
+    display_table["Sell-Through %"] = display_table["Sell-Through %"].apply(lambda x: f"{x:.1f}%")
+    display_table["Units / Month"] = display_table["Units / Month"].apply(lambda x: f"{x:.1f}")
+    display_table["Days of Supply"] = display_table["Days of Supply"].apply(
+        lambda x: "999+" if x >= 999 else str(x)
+    )
+    st.dataframe(display_table, use_container_width=True, hide_index=True)
+    st.caption(
+        "Sell-Through Rate = units sold / total units ordered. "
+        "Days of Supply = remaining stock / monthly velocity x 30. "
+        "Signal thresholds: Reorder Now if STR >= 80%, or >= 50% within first 2 months."
+    )
+
+
+# ==============================================================================
+# PAGE: PROMOTIONS & MARKETING IMPACT
+# ==============================================================================
+elif page == "Promotions":
+    st.markdown("# Marketing & Promotions")
+    st.markdown("*Three independent analyses: paid campaigns, content creation impact, and influencer shares*")
+    st.markdown("---")
+
+    # ── Shared helper: load & clean sales daily ──
+    PROMO_RAW_PATH = None
+    for candidate in ["Sales_Data_Urth Mama.csv", "Sales_Data_Urth_Mama.csv",
+                       os.path.join(DATA_DIR, "_temp_upload.csv")]:
+        if os.path.exists(candidate):
+            PROMO_RAW_PATH = candidate
+            break
+    if PROMO_RAW_PATH is None and os.path.exists(DATA_DIR):
+        for f in os.listdir(DATA_DIR):
+            if f.lower().startswith("sales_data") and f.endswith(".csv"):
+                PROMO_RAW_PATH = os.path.join(DATA_DIR, f)
+
+    WHOLESALE_CUSTS = [
+        "safa awad", "wholesale ambefrul", "ambefrul", "samira",
+        "rasha yassine", "fatima fadel", "imad play one",
+        "wholesale trendy kids", "trendy kids"
+    ]
+
+    @st.cache_data
+    def load_daily_sales(raw_path, _bust=""):
+        if raw_path is None or not os.path.exists(raw_path):
+            return None
+        df = pd.read_csv(raw_path)
+        df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_", regex=False)
+        df["day"] = pd.to_datetime(df["day"], errors="coerce")
+        df["net_sales"] = pd.to_numeric(df.get("net_sales", df.get("total_sales", 0)), errors="coerce").fillna(0)
+        df["_cust"] = df.get("customer_name", pd.Series([""] * len(df))).fillna("").str.strip().str.lower()
+        df = df[~df["_cust"].apply(lambda c: any(w in c for w in WHOLESALE_CUSTS))]
+        df = df[df["product_title"].notna()]
+        daily = df.groupby("day").agg(revenue=("net_sales", "sum"), orders=("order_name", "nunique")).reset_index()
+        full_idx = pd.date_range(daily["day"].min(), daily["day"].max(), freq="D")
+        daily = daily.set_index("day").reindex(full_idx, fill_value=0).reset_index()
+        daily.rename(columns={"index": "day"}, inplace=True)
+        # 28-day trailing median baseline (excludes current day)
+        daily["baseline"] = daily["revenue"].shift(1).rolling(28, min_periods=14).median()
+        return daily
+
+    daily_sales = load_daily_sales(PROMO_RAW_PATH, _bust=st.session_state.get("last_refresh", ""))
+
+    if daily_sales is None:
+        st.warning("Sales CSV not found. Place your Shopify export in the project folder.")
+        st.stop()
+
+    # ── File paths for marketing data (uploaded or in data/) ──
+    URTH_CSV  = os.path.join(DATA_DIR, "Urth-Mama-Campaigns.csv")
+    HIND_CSV  = os.path.join(DATA_DIR, "Hind-Amouri-Campaigns.csv")
+    CC_XLS    = os.path.join(DATA_DIR, "content_creation.xlsx")
+    IGS_XLS   = os.path.join(DATA_DIR, "Instagram_shares.xlsx")
+
+    # ──────────────────────────────────────────────────────────
+    # TAB LAYOUT
+    # ──────────────────────────────────────────────────────────
+    tab1, tab2, tab3 = st.tabs([
+        "Paid Campaigns",
+        "Content Creation",
+        "Influencer Shares"
+    ])
+
+    # ══════════════════════════════════════════════════════════
+    # TAB 1: PAID CAMPAIGNS
+    # ══════════════════════════════════════════════════════════
+    with tab1:
+        st.markdown("### Paid Campaign Performance")
+        st.markdown("*Meta Ads spend across the Urth Mama and Hind Amouri accounts, and whether campaign months coincide with sales spikes*")
+
+        with st.expander("Upload campaign CSVs (if not auto-detected)", expanded=False):
+            urth_up = st.file_uploader("Urth Mama Campaigns CSV", type="csv", key="urth_tab")
+            hind_up = st.file_uploader("Hind Amouri Campaigns CSV", type="csv", key="hind_tab")
+
+        @st.cache_data
+        def load_campaigns(urth_bytes, hind_bytes, _bust=""):
+            import io
+            frames = []
+            for b, acct in [(urth_bytes, "Urth Mama"), (hind_bytes, "Hind Amouri")]:
+                if b:
+                    d = pd.read_csv(io.BytesIO(b))
+                    d["account"] = acct
+                    frames.append(d)
+            if not frames:
+                return None
+            ig = pd.concat(frames, ignore_index=True)
+            ig.columns = ig.columns.str.strip()
+            ig["Ends"] = pd.to_datetime(ig["Ends"], errors="coerce")
+            ig["Amount spent (USD)"] = pd.to_numeric(ig["Amount spent (USD)"], errors="coerce").fillna(0)
+            ig["Impressions"] = pd.to_numeric(ig["Impressions"], errors="coerce").fillna(0)
+            ig["Reach"] = pd.to_numeric(ig["Reach"], errors="coerce").fillna(0)
+            ig["Results"] = pd.to_numeric(ig["Results"], errors="coerce").fillna(0)
+            ig["year_month"] = ig["Ends"].dt.to_period("M").dt.to_timestamp()
+            return ig
+
+        def _bytes(upload, path):
+            if upload is not None:
+                return upload.read()
+            if os.path.exists(path):
+                with open(path, "rb") as f:
+                    return f.read()
+            return None
+
+        urth_b = _bytes(urth_up, URTH_CSV)
+        hind_b = _bytes(hind_up, HIND_CSV)
+        camps = load_campaigns(urth_b, hind_b, _bust=st.session_state.get("last_refresh", ""))
+
+        if camps is None:
+            st.info("Upload the campaign CSVs above, or place them in the `data/` folder as `Urth-Mama-Campaigns.csv` and `Hind-Amouri-Campaigns.csv`.")
+        else:
+            total_spend    = camps["Amount spent (USD)"].sum()
+            total_reach    = camps["Reach"].sum()
+            total_results  = camps["Results"].sum()
+            n_campaigns    = len(camps)
+            hind_spend     = camps[camps["account"] == "Hind Amouri"]["Amount spent (USD)"].sum()
+            urth_spend     = camps[camps["account"] == "Urth Mama"]["Amount spent (USD)"].sum()
+
+            c1, c2, c3, c4 = st.columns(4)
+            with c1: st.metric("Total Ad Spend", f"${total_spend:,.0f}")
+            with c2: st.metric("Total Reach", f"{total_reach:,.0f}")
+            with c3: st.metric("Total Results", f"{total_results:,.0f}")
+            with c4: st.metric("Campaigns Run", f"{n_campaigns}")
+
+            st.markdown("<br>", unsafe_allow_html=True)
+
+            # ── Spend by account ──
+            acct_df = pd.DataFrame({
+                "Account": ["Hind Amouri", "Urth Mama"],
+                "Spend": [hind_spend, urth_spend]
+            })
+
+            col_a, col_b = st.columns(2)
+            with col_a:
+                st.markdown("#### Spend by Account")
+                fig = go.Figure(go.Bar(
+                    x=acct_df["Account"], y=acct_df["Spend"],
+                    marker_color=[COLORS["secondary"], COLORS["primary"]],
+                    text=acct_df["Spend"].apply(lambda x: f"${x:,.0f}"),
+                    textposition="outside"
+                ))
+                fig.update_layout(
+                    height=300, margin=dict(l=10, r=10, t=10, b=10),
+                    paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                    yaxis=dict(title="Spend ($)", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+                    xaxis=dict(showgrid=False),
+                    font=dict(family="Courier New, Courier, monospace"), showlegend=False
+                )
+                st.plotly_chart(fig, use_container_width=True)
+
+            with col_b:
+                st.markdown("#### Monthly Spend Timeline")
+                monthly = camps.groupby(["year_month", "account"])["Amount spent (USD)"].sum().reset_index()
+                fig2 = go.Figure()
+                for acct, color in [("Urth Mama", COLORS["primary"]), ("Hind Amouri", COLORS["secondary"])]:
+                    sub = monthly[monthly["account"] == acct]
+                    fig2.add_trace(go.Bar(x=sub["year_month"], y=sub["Amount spent (USD)"],
+                                          name=acct, marker_color=color))
+                fig2.update_layout(
+                    barmode="stack", height=300, margin=dict(l=10, r=10, t=10, b=10),
+                    paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                    yaxis=dict(title="Spend ($)", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+                    xaxis=dict(showgrid=False),
+                    font=dict(family="Courier New, Courier, monospace"),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02)
+                )
+                st.plotly_chart(fig2, use_container_width=True)
+
+            st.markdown("---")
+            st.markdown("#### Campaign Months vs. Sales")
+            st.markdown("*Do months with higher ad spend coincide with higher daily revenue?*")
+
+            # monthly sales
+            ms = daily_sales.copy()
+            ms["year_month"] = pd.to_datetime(ms["day"]).dt.to_period("M").dt.to_timestamp()
+            monthly_sales = ms.groupby("year_month")["revenue"].sum().reset_index()
+            monthly_spend_total = camps.groupby("year_month")["Amount spent (USD)"].sum().reset_index()
+
+            merged = monthly_sales.merge(monthly_spend_total, on="year_month", how="left").fillna(0)
+            merged["has_spend"] = merged["Amount spent (USD)"] > 0
+
+            fig3 = make_subplots(specs=[[{"secondary_y": True}]])
+            fig3.add_trace(go.Bar(
+                x=merged["year_month"], y=merged["revenue"],
+                name="Monthly Sales",
+                marker_color=[COLORS["primary"] if h else COLORS["class_c"] for h in merged["has_spend"]],
+                hovertemplate="%{x|%b %Y}<br>Sales: $%{y:,.0f}<extra></extra>"
+            ), secondary_y=False)
+            fig3.add_trace(go.Scatter(
+                x=merged[merged["has_spend"]]["year_month"],
+                y=merged[merged["has_spend"]]["Amount spent (USD)"],
+                mode="markers", name="Ad Spend",
+                marker=dict(color=COLORS["accent"], size=10, symbol="diamond"),
+                hovertemplate="%{x|%b %Y}<br>Spend: $%{y:,.0f}<extra></extra>"
+            ), secondary_y=True)
+            fig3.update_layout(
+                height=380, margin=dict(l=10, r=60, t=10, b=10),
+                paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(family="Courier New, Courier, monospace"),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02),
+                hovermode="x unified"
+            )
+            fig3.update_yaxes(title_text="Monthly Sales ($)", secondary_y=False,
+                              showgrid=True, gridcolor="rgba(42,157,143,0.1)")
+            fig3.update_yaxes(title_text="Ad Spend ($)", secondary_y=True, showgrid=False)
+            st.plotly_chart(fig3, use_container_width=True)
+            st.caption("Teal bars = months with active ad spend | Grey bars = no spend | Diamond markers show spend amount (right axis)")
+
+            st.markdown("---")
+            st.markdown("#### Top 10 Campaigns by Reach")
+            top10 = camps.nlargest(10, "Reach")[["account", "Campaign name", "Amount spent (USD)", "Reach", "Results", "Ends"]].copy()
+            top10["Amount spent (USD)"] = top10["Amount spent (USD)"].apply(lambda x: f"${x:,.2f}")
+            top10["Reach"] = top10["Reach"].apply(lambda x: f"{x:,.0f}")
+            top10["Results"] = top10["Results"].apply(lambda x: f"{x:,.0f}")
+            top10["Ends"] = top10["Ends"].dt.strftime("%Y-%m-%d")
+            top10.columns = ["Account", "Campaign", "Spend", "Reach", "Results", "End Date"]
+            st.dataframe(top10, use_container_width=True, hide_index=True)
+
+    # ══════════════════════════════════════════════════════════
+    # TAB 2: CONTENT CREATION
+    # ══════════════════════════════════════════════════════════
+    with tab2:
+        st.markdown("### Content Creation Impact")
+        st.markdown("*Does daily revenue increase in the 7 days following a content post, compared to the 28-day rolling baseline?*")
+
+        with st.expander("Upload content creation dates (if not auto-detected)", expanded=False):
+            cc_up = st.file_uploader("Content Creation Excel (.xlsx)", type="xlsx", key="cc_tab")
+
+        @st.cache_data
+        def load_content_dates(cc_bytes, _bust=""):
+            import io
+            if cc_bytes:
+                df = pd.read_excel(io.BytesIO(cc_bytes))
+            elif os.path.exists(CC_XLS):
+                df = pd.read_excel(CC_XLS)
+            else:
+                return None
+            df.columns = df.columns.str.strip()
+            date_col = df.columns[0]
+            df["date"] = pd.to_datetime(df[date_col], errors="coerce")
+            return df.dropna(subset=["date"])
+
+        cc_bytes = cc_up.read() if cc_up else None
+        cc_df = load_content_dates(cc_bytes, _bust=st.session_state.get("last_refresh", ""))
+
+        if cc_df is None:
+            st.info("Upload the content creation Excel file above, or place it in `data/content_creation.xlsx`.")
+        else:
+            sales_end = daily_sales["day"].max()
+            cc_df = cc_df[cc_df["date"] <= sales_end]
+
+            # ── Per-event lift table ──
+            POST_WINDOW = 7
+            lift_rows = []
+            for _, row in cc_df.iterrows():
+                d = row["date"]
+                post = daily_sales[(daily_sales["day"] > d) & (daily_sales["day"] <= d + pd.Timedelta(days=POST_WINDOW))]
+                bl = daily_sales[daily_sales["day"] == d]["baseline"].values
+                if len(post) == 0 or len(bl) == 0 or pd.isna(bl[0]) or bl[0] == 0:
+                    continue
+                avg_post = post["revenue"].mean()
+                lift = (avg_post - bl[0]) / bl[0] * 100
+                lift_rows.append({"date": d, "baseline_daily": bl[0], "avg_post_daily": avg_post, "lift_pct": lift})
+
+            lift_df = pd.DataFrame(lift_rows)
+
+            if len(lift_df) == 0:
+                st.warning("No content dates overlap with the sales data range.")
+            else:
+                pct_positive = (lift_df["lift_pct"] > 0).mean() * 100
+                median_lift  = lift_df["lift_pct"].median()
+                avg_lift     = lift_df["lift_pct"].mean()
+                n_events     = len(lift_df)
+
+                c1, c2, c3, c4 = st.columns(4)
+                with c1: st.metric("Posts Analysed", f"{n_events}")
+                with c2: st.metric("Posts with Positive Lift", f"{pct_positive:.0f}%")
+                with c3: st.metric("Median Lift (7-day avg)", f"{median_lift:+.1f}%")
+                with c4: st.metric("Mean Lift", f"{avg_lift:+.1f}%")
+
+                if median_lift > 5:
+                    st.success(f"Content posts tend to coincide with a **+{median_lift:.0f}% lift** in daily revenue vs. the 28-day baseline.")
+                elif median_lift < -5:
+                    st.info("Content posts do not show a clear positive sales effect in the 7-day window. This could mean the effect is longer-term, or that posts tend to happen during quieter periods.")
+                else:
+                    st.info("Content posts show a small or mixed effect on short-term daily revenue.")
+
+                st.markdown("---")
+
+                # ── Timeline: daily sales with post dates marked ──
+                st.markdown("#### Daily Sales with Content Post Dates")
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(
+                    x=daily_sales["day"], y=daily_sales["revenue"],
+                    mode="lines", name="Daily Revenue",
+                    line=dict(color=COLORS["primary"], width=1.5),
+                    opacity=0.7
+                ))
+                fig.add_trace(go.Scatter(
+                    x=daily_sales["day"], y=daily_sales["baseline"],
+                    mode="lines", name="28-Day Baseline",
+                    line=dict(color=COLORS["class_c"], width=1.5, dash="dot")
+                ))
+                # Post markers
+                post_sales = []
+                for d in cc_df["date"]:
+                    match = daily_sales[daily_sales["day"] == d]["revenue"]
+                    post_sales.append(match.values[0] if len(match) > 0 else 0)
+                fig.add_trace(go.Scatter(
+                    x=cc_df["date"], y=post_sales,
+                    mode="markers", name="Content Posted",
+                    marker=dict(color=COLORS["accent"], size=9, symbol="triangle-up",
+                                line=dict(color="white", width=1))
+                ))
+                fig.update_layout(
+                    height=420, margin=dict(l=10, r=10, t=10, b=10),
+                    paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                    xaxis=dict(showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+                    yaxis=dict(title="Revenue ($)", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+                    font=dict(family="Courier New, Courier, monospace"),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02),
+                    hovermode="x unified"
+                )
+                st.plotly_chart(fig, use_container_width=True)
+
+                st.markdown("---")
+                st.markdown("#### Lift Distribution Across Posts")
+
+                fig2 = go.Figure()
+                colors_lift = [COLORS["primary"] if v >= 0 else COLORS["accent"] for v in lift_df["lift_pct"]]
+                fig2.add_trace(go.Bar(
+                    x=lift_df["date"], y=lift_df["lift_pct"],
+                    marker_color=colors_lift,
+                    hovertemplate="%{x|%b %d %Y}<br>Lift: %{y:+.1f}%<extra></extra>"
+                ))
+                fig2.add_hline(y=0, line_color="gray", line_width=1)
+                fig2.add_hline(y=lift_df["lift_pct"].median(), line_dash="dash",
+                               line_color=COLORS["secondary"], annotation_text=f"Median: {median_lift:+.1f}%")
+                fig2.update_layout(
+                    height=320, margin=dict(l=10, r=10, t=30, b=10),
+                    paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                    xaxis=dict(showgrid=False),
+                    yaxis=dict(title="Revenue Lift (%)", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+                    font=dict(family="Courier New, Courier, monospace")
+                )
+                st.plotly_chart(fig2, use_container_width=True)
+                st.caption("Each bar = one content post. Teal = sales above baseline in next 7 days. Orange = below baseline.")
+
+    # ══════════════════════════════════════════════════════════
+    # TAB 3: INFLUENCER SHARES
+    # ══════════════════════════════════════════════════════════
+    with tab3:
+        st.markdown("### Influencer Story Shares Impact")
+        st.markdown("*Does daily revenue increase in the 7 days following an influencer share, compared to the 28-day rolling baseline?*")
+
+        with st.expander("Upload influencer shares file (if not auto-detected)", expanded=False):
+            igs_up = st.file_uploader("Instagram Shares Excel (.xlsx)", type="xlsx", key="igs_tab")
+
+        @st.cache_data
+        def load_ig_shares(igs_bytes, _bust=""):
+            import io
+            if igs_bytes:
+                df = pd.read_excel(io.BytesIO(igs_bytes))
+            elif os.path.exists(IGS_XLS):
+                df = pd.read_excel(IGS_XLS)
+            else:
+                return None
+            df.columns = df.columns.str.strip()
+            if "Sharing date" in df.columns:
+                df["date"] = pd.to_datetime(df["Sharing date"], errors="coerce")
+            else:
+                df["date"] = pd.to_datetime(df.iloc[:, 1], errors="coerce")
+            if "User" in df.columns:
+                df["influencer"] = df["User"]
+            else:
+                df["influencer"] = df.iloc[:, 0]
+            # Drop the one bad-year entry
+            df = df[df["date"].dt.year < 2100].dropna(subset=["date"])
+            return df
+
+        igs_bytes = igs_up.read() if igs_up else None
+        igs_df = load_ig_shares(igs_bytes, _bust=st.session_state.get("last_refresh", ""))
+
+        if igs_df is None:
+            st.info("Upload the Instagram shares Excel file above, or place it in `data/Instagram_shares.xlsx`.")
+        else:
+            sales_end = daily_sales["day"].max()
+            igs_df = igs_df[igs_df["date"] <= sales_end]
+
+            POST_WINDOW = 7
+            lift_rows_ig = []
+            for _, row in igs_df.iterrows():
+                d = row["date"]
+                post = daily_sales[(daily_sales["day"] > d) & (daily_sales["day"] <= d + pd.Timedelta(days=POST_WINDOW))]
+                bl = daily_sales[daily_sales["day"] == d]["baseline"].values
+                if len(post) == 0 or len(bl) == 0 or pd.isna(bl[0]) or bl[0] == 0:
+                    continue
+                avg_post = post["revenue"].mean()
+                lift = (avg_post - bl[0]) / bl[0] * 100
+                lift_rows_ig.append({
+                    "date": d, "influencer": row["influencer"],
+                    "baseline_daily": bl[0], "avg_post_daily": avg_post, "lift_pct": lift
+                })
+
+            lift_ig = pd.DataFrame(lift_rows_ig)
+
+            if len(lift_ig) == 0:
+                st.warning("No share dates overlap with the sales data range.")
+            else:
+                pct_pos_ig   = (lift_ig["lift_pct"] > 0).mean() * 100
+                median_ig    = lift_ig["lift_pct"].median()
+                avg_ig       = lift_ig["lift_pct"].mean()
+                n_shares     = len(lift_ig)
+                n_influencers = lift_ig["influencer"].nunique()
+
+                c1, c2, c3, c4 = st.columns(4)
+                with c1: st.metric("Shares Analysed", f"{n_shares}")
+                with c2: st.metric("Influencers", f"{n_influencers}")
+                with c3: st.metric("Shares with Positive Lift", f"{pct_pos_ig:.0f}%")
+                with c4: st.metric("Median Lift (7-day avg)", f"{median_ig:+.1f}%")
+
+                if median_ig > 5:
+                    st.success(f"Influencer shares tend to coincide with a **+{median_ig:.0f}% lift** in daily revenue vs. the 28-day baseline.")
+                elif median_ig < -5:
+                    st.info("Influencer shares don't show a clear short-term sales effect. The impact may be longer-term or brand-awareness oriented.")
+                else:
+                    st.info("Influencer shares show a mixed effect on short-term daily revenue.")
+
+                st.markdown("---")
+
+                # ── Timeline ──
+                st.markdown("#### Daily Sales with Influencer Share Dates")
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(
+                    x=daily_sales["day"], y=daily_sales["revenue"],
+                    mode="lines", name="Daily Revenue",
+                    line=dict(color=COLORS["primary"], width=1.5), opacity=0.7
+                ))
+                fig.add_trace(go.Scatter(
+                    x=daily_sales["day"], y=daily_sales["baseline"],
+                    mode="lines", name="28-Day Baseline",
+                    line=dict(color=COLORS["class_c"], width=1.5, dash="dot")
+                ))
+                share_sales = []
+                for d in igs_df["date"]:
+                    match = daily_sales[daily_sales["day"] == d]["revenue"]
+                    share_sales.append(match.values[0] if len(match) > 0 else 0)
+                fig.add_trace(go.Scatter(
+                    x=igs_df["date"], y=share_sales,
+                    mode="markers", name="Influencer Share",
+                    marker=dict(color=COLORS["accent"], size=9, symbol="star",
+                                line=dict(color="white", width=1)),
+                    text=igs_df["influencer"],
+                    hovertemplate="%{text}<br>%{x|%b %d %Y}<br>Revenue: $%{y:,.0f}<extra></extra>"
+                ))
+                fig.update_layout(
+                    height=420, margin=dict(l=10, r=10, t=10, b=10),
+                    paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                    xaxis=dict(showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+                    yaxis=dict(title="Revenue ($)", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+                    font=dict(family="Courier New, Courier, monospace"),
+                    legend=dict(orientation="h", yanchor="bottom", y=1.02),
+                    hovermode="x unified"
+                )
+                st.plotly_chart(fig, use_container_width=True)
+
+                st.markdown("---")
+
+                col_left, col_right = st.columns(2)
+
+                with col_left:
+                    st.markdown("#### Lift per Share Event")
+                    colors_ig = [COLORS["primary"] if v >= 0 else COLORS["accent"] for v in lift_ig["lift_pct"]]
+                    fig2 = go.Figure(go.Bar(
+                        x=lift_ig["date"], y=lift_ig["lift_pct"],
+                        marker_color=colors_ig,
+                        text=lift_ig["influencer"],
+                        hovertemplate="%{text}<br>%{x|%b %d %Y}<br>Lift: %{y:+.1f}%<extra></extra>"
+                    ))
+                    fig2.add_hline(y=0, line_color="gray", line_width=1)
+                    fig2.add_hline(y=median_ig, line_dash="dash",
+                                   line_color=COLORS["secondary"],
+                                   annotation_text=f"Median: {median_ig:+.1f}%")
+                    fig2.update_layout(
+                        height=320, margin=dict(l=10, r=10, t=30, b=10),
+                        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                        xaxis=dict(showgrid=False),
+                        yaxis=dict(title="Lift (%)", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+                        font=dict(family="Courier New, Courier, monospace")
+                    )
+                    st.plotly_chart(fig2, use_container_width=True)
+
+                with col_right:
+                    st.markdown("#### Average Lift by Influencer")
+                    by_inf = lift_ig.groupby("influencer").agg(
+                        shares=("date", "count"),
+                        median_lift=("lift_pct", "median"),
+                        avg_lift=("lift_pct", "mean")
+                    ).reset_index().sort_values("median_lift", ascending=True)
+
+                    bar_colors = [COLORS["primary"] if v >= 0 else COLORS["accent"] for v in by_inf["median_lift"]]
+                    fig3 = go.Figure(go.Bar(
+                        x=by_inf["median_lift"],
+                        y=by_inf["influencer"],
+                        orientation="h",
+                        marker_color=bar_colors,
+                        text=by_inf.apply(lambda r: f"{r['shares']} share{'s' if r['shares']>1 else ''}", axis=1),
+                        textposition="outside",
+                        hovertemplate="%{y}<br>Median Lift: %{x:+.1f}%<extra></extra>"
+                    ))
+                    fig3.add_vline(x=0, line_color="gray", line_width=1)
+                    fig3.update_layout(
+                        height=320, margin=dict(l=10, r=60, t=10, b=10),
+                        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                        xaxis=dict(title="Median 7-Day Lift (%)", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+                        yaxis=dict(showgrid=False),
+                        font=dict(family="Courier New, Courier, monospace")
+                    )
+                    st.plotly_chart(fig3, use_container_width=True)
+                    st.caption("Teal = positive lift | Orange = negative lift | Count = number of shares analysed")
+
+
 
 # ==============================================================================
 # PAGE: CUSTOMERS
@@ -1379,7 +1976,7 @@ elif page == "Customers":
         fig = px.pie(seg_df, values='Customers', names='Segment', hole=0.4,
                      color_discrete_sequence=[COLORS['class_c'], COLORS['primary']])
         fig.update_layout(height=320, margin=dict(l=20, r=20, t=20, b=20),
-                          paper_bgcolor='rgba(0,0,0,0)', font=dict(family='Open Sans'))
+                          paper_bgcolor='rgba(0,0,0,0)', font=dict(family='Courier New, Courier, monospace'))
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
@@ -1394,13 +1991,13 @@ elif page == "Customers":
                           paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
                           xaxis=dict(title='Number of Orders', showgrid=False),
                           yaxis=dict(title='Customers', showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)'),
-                          font=dict(family='Open Sans'))
+                          font=dict(family='Courier New, Courier, monospace'))
         st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("---")
 
     # ── Top 10 Delivery Cities ──
-    st.markdown("### 📍 Top 10 Delivery Cities")
+    st.markdown("### Top 10 Delivery Cities")
     
     # Load raw data for shipping city
     try:
@@ -1468,7 +2065,7 @@ elif page == "Customers":
                     plot_bgcolor='rgba(0,0,0,0)',
                     xaxis=dict(title='Number of Orders', showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)'),
                     yaxis=dict(autorange='reversed', showgrid=False),
-                    font=dict(family='Open Sans'),
+                    font=dict(family='Courier New, Courier, monospace'),
                     title=dict(text='By Orders', font=dict(size=14))
                 )
                 st.plotly_chart(fig, use_container_width=True)
@@ -1490,7 +2087,7 @@ elif page == "Customers":
                     plot_bgcolor='rgba(0,0,0,0)',
                     xaxis=dict(title='Revenue ($)', showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)'),
                     yaxis=dict(autorange='reversed', showgrid=False),
-                    font=dict(family='Open Sans'),
+                    font=dict(family='Courier New, Courier, monospace'),
                     title=dict(text='By Revenue', font=dict(size=14))
                 )
                 st.plotly_chart(fig, use_container_width=True)
@@ -1514,7 +2111,7 @@ elif page == "Customers":
                       paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
                       xaxis=dict(showgrid=False),
                       yaxis=dict(title='New Customers', showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)'),
-                      font=dict(family='Open Sans'), hovermode='x unified')
+                      font=dict(family='Courier New, Courier, monospace'), hovermode='x unified')
     st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("---")
@@ -1537,7 +2134,7 @@ elif page == "Customers":
                       paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
                       xaxis=dict(showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)'),
                       yaxis=dict(title='Avg Order Value ($)', showgrid=True, gridcolor='rgba(42, 157, 143, 0.1)'),
-                      font=dict(family='Open Sans'),
+                      font=dict(family='Courier New, Courier, monospace'),
                       legend=dict(orientation='h', yanchor='bottom', y=1.02),
                       hovermode='x unified')
     st.plotly_chart(fig, use_container_width=True)
@@ -1551,7 +2148,7 @@ elif page == "Customers":
     top_customers['total_revenue'] = top_customers['total_revenue'].apply(lambda x: f"${x:,.0f}")
     top_customers['avg_order_value'] = top_customers['avg_order_value'].apply(lambda x: f"${x:,.0f}")
     top_customers['discount_rate'] = top_customers['discount_rate'].apply(lambda x: f"{x:.1f}%")
-    top_customers['is_repeat'] = top_customers['is_repeat'].map({True: '✓', False: '—'})
+    top_customers['is_repeat'] = top_customers['is_repeat'].map({True: 'Yes', False: '—'})
     top_customers = top_customers.rename(columns={
         'customer_name': 'Customer', 'total_orders': 'Orders',
         'total_revenue': 'Lifetime Revenue', 'avg_order_value': 'Avg Order Value',
@@ -1569,7 +2166,7 @@ elif page == "Customers":
 # ==============================================================================
 st.markdown("---")
 st.markdown(
-    "<p style='text-align: center; color: #5a9a8f; font-family: Open Sans;'>"
+    "<p style='text-align: center; color: #5a9a8f; font-family: 'Courier New', Courier, monospace;'>"
     "Urth Mama Analytics Dashboard | MSBA Capstone Project | Rabab Ali Swaidan | May 2026"
     "</p>",
     unsafe_allow_html=True
