@@ -1065,26 +1065,15 @@ elif page == "Inventory by Product":
 
 
 
+
 # ==============================================================================
 # PAGE: NEW PRODUCTS
 # ==============================================================================
 elif page == "New Products":
     st.markdown("# New Products")
-    st.markdown("*Performance evaluation of products introduced in the second half of 2025*")
+    st.markdown("*Sales performance of products and new color ranges introduced in H2 2025*")
     st.markdown("---")
 
-    st.markdown("""
-**How to read this section**
-
-Three retail metrics are used to evaluate each newly introduced product:
-
-- **Sell-Through Rate (STR):** Units sold as a percentage of initial stock ordered. The standard retail benchmark is 80% sell-through within the first season (~3 months). Above 80% is strong; below 40% warrants review.
-- **Monthly Velocity:** Average units sold per month since introduction. Useful for comparing products introduced at different times on equal footing.
-- **Days of Supply Remaining:** At the current monthly velocity, how many days of stock are left. Below 30 days is a reorder signal; above 180 days suggests slow movement.
-""")
-    st.markdown("---")
-
-    # ── Load sales data ──
     NEW_PROD_RAW = None
     for candidate in ["Sales_Data_Urth Mama.csv", "Sales_Data_Urth_Mama.csv",
                        os.path.join(DATA_DIR, "_temp_upload.csv")]:
@@ -1096,298 +1085,169 @@ Three retail metrics are used to evaluate each newly introduced product:
             if f.lower().startswith("sales_data") and f.endswith(".csv"):
                 NEW_PROD_RAW = os.path.join(DATA_DIR, f)
 
-    # ── Inventory file upload ──
-    with st.expander("Upload new products inventory file (if not auto-detected)", expanded=False):
-        inv_up = st.file_uploader("Newly Introduced Products Excel (.xlsx)", type="xlsx", key="newprod_inv")
-
-    NEW_PROD_INV = os.path.join(DATA_DIR, "Newly_introduced_products.xlsx")
-
-    @st.cache_data
-    def load_new_product_inventory(inv_bytes, _bust=""):
-        import io
-        # Hardcoded clean parse of the structured inventory file
-        # (the raw Excel is a multi-section format; we parse it explicitly)
-        records = [
-            # product_title, variant, intro_month, initial_stock
-            ("OmieBox Pastel", "Pixie Pink",        "2025-08-01", 36),
-            ("OmieBox Pastel", "Sea Blue",           "2025-08-01", 36),
-            ("OmieBox Pastel", "Apple Green",        "2025-08-01", 24),
-            ("OmieBox Pastel", "Lilac Purple",       "2025-08-01", 36),
-            ("OmieBox Pastel", "Popp Orange",        "2025-08-01", 24),
-            # Nov restock
-            ("OmieBox Pastel", "Pixie Pink",         "2025-11-01", 216),
-            ("OmieBox Pastel", "Sea Blue",           "2025-11-01", 216),
-            ("OmieBox Pastel", "Apple Green",        "2025-11-01", 102),
-            ("OmieBox Pastel", "Lilac Purple",       "2025-11-01", 216),
-            ("OmieBox Pastel", "Popp Orange",        "2025-11-01", 102),
-            # Yumbox Tapas 5C — Sep
-            ("Yumbox Tapas 5 Compartments (Large)", "Malibu Purple",     "2025-09-01", 12),
-            ("Yumbox Tapas 5 Compartments (Large)", "Palm Green",        "2025-09-01", 12),
-            ("Yumbox Tapas 5 Compartments (Large)", "Monte Carlo Blue",  "2025-09-01", 24),
-            # Yumbox Tapas 4C — Sep
-            ("Yumbox Tapas 4 Compartments (Large)", "Monte Carlo Blue",  "2025-09-01", 24),
-            ("Yumbox Tapas 4 Compartments (Large)", "Capri Pink Rainbow","2025-09-01", 36),
-            ("Yumbox Tapas 4 Compartments (Large)", "Hazy Blue",        "2025-09-01", 12),
-            ("Yumbox Tapas 4 Compartments (Large)", "Seville Purple",    "2025-09-01", 36),
-            # MontiiCo 700ml — Oct
-            ("MontiiCo 700ml Water Bottle", "Floss",   "2025-10-01", 50),
-            ("MontiiCo 700ml Water Bottle", "Midnight","2025-10-01", 50),
-            ("MontiiCo 700ml Water Bottle", "Splash",  "2025-10-01", 50),
-            ("MontiiCo 700ml Water Bottle", "Fuschia", "2025-10-01", 25),
-            # MontiiCo 475ml — Oct + Dec
-            ("MontiiCo 475ml Water Bottle", "Floss",   "2025-10-01", 25),
-            ("MontiiCo 475ml Water Bottle", "Fuschia", "2025-10-01", 25),
-            ("MontiiCo 475ml Water Bottle", "Splash",  "2025-10-01", 25),
-            ("MontiiCo 475ml Water Bottle", "Matcha",  "2025-10-01", 25),
-            ("MontiiCo 475ml Water Bottle", "Lilac",   "2025-12-01", 50),
-            # MontiiCo 350ml — Oct + Dec
-            ("MontiiCo 350ml Water Bottle", "Splash",  "2025-10-01", 25),
-            ("MontiiCo 350ml Water Bottle", "Floss",   "2025-10-01", 25),
-            ("MontiiCo 350ml Water Bottle", "Matcha",  "2025-10-01", 25),
-            ("MontiiCo 350ml Water Bottle", "Lilac",   "2025-12-01", 25),
-            # MontiiCo Feast Lunchbox — Dec
-            ("MontiiCo Feast Lunchbox", "Splash", "2025-12-01", 60),
-            ("MontiiCo Feast Lunchbox", "Lilac",  "2025-12-01", 60),
-            # MontiiCo Mini Food Jar — Dec
-            ("MontiiCo Mini Food Jar", "Floss",  "2025-12-01", 25),
-            ("MontiiCo Mini Food Jar", "Splash", "2025-12-01", 25),
-            ("MontiiCo Mini Food Jar", "Lilac",  "2025-12-01", 25),
-            ("MontiiCo Mini Food Jar", "Marine", "2025-12-01", 25),
-            # MontiiCo Food Jar 400ml — Dec
-            ("MontiiCo Food Jar 400ml", "Floss",  "2025-12-01", 25),
-            ("MontiiCo Food Jar 400ml", "Lilac",  "2025-12-01", 25),
-            ("MontiiCo Food Jar 400ml", "Splash", "2025-12-01", 25),
-        ]
-        inv = pd.DataFrame(records, columns=["product_title", "variant", "intro_date", "stock"])
-        inv["intro_date"] = pd.to_datetime(inv["intro_date"])
-        # First-batch stock only (for sell-through denominator — exclude restocks)
-        first_batch = inv[inv["intro_date"] <= pd.Timestamp("2025-10-01")].groupby("product_title")
-        first_stock = inv.groupby(["product_title", "intro_date"])["stock"].sum().reset_index()
-        # Total stock ever ordered per product
-        total_stock = inv.groupby("product_title")["stock"].sum().reset_index()
-        total_stock.rename(columns={"stock": "total_stock_ordered"}, inplace=True)
-        # First intro date per product
-        first_intro = inv.groupby("product_title")["intro_date"].min().reset_index()
-        result = first_intro.merge(total_stock, on="product_title")
-        return result, inv
-
-    inv_bytes_data = inv_up.read() if inv_up else None
-    inv_summary, inv_detail = load_new_product_inventory(
-        inv_bytes_data, _bust=st.session_state.get("last_refresh", "")
-    )
-
     if NEW_PROD_RAW is None:
-        st.warning("Sales CSV not found. Place your Shopify export in the project folder.")
+        st.warning("Sales CSV not found.")
         st.stop()
 
     @st.cache_data
-    def load_new_prod_sales(raw_path, _bust=""):
+    def load_new_prod_perf(raw_path, _bust=""):
         df = pd.read_csv(raw_path)
         df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_", regex=False)
         df["day"] = pd.to_datetime(df["day"], errors="coerce")
         df["orders"] = pd.to_numeric(df.get("orders", df.get("net_items_sold", 0)), errors="coerce").fillna(0)
-        df["net_sales"] = pd.to_numeric(df.get("net_sales", 0), errors="coerce").fillna(0)
-        return df[df["product_title"].notna() & (df["orders"] > 0)]
+        df = df[df["product_title"].notna() & (df["orders"] > 0)]
+        return df
 
-    raw_sales = load_new_prod_sales(NEW_PROD_RAW, _bust=st.session_state.get("last_refresh", ""))
+    raw = load_new_prod_perf(NEW_PROD_RAW, _bust=st.session_state.get("last_refresh", ""))
+
+    # Newly introduced products with their intro dates
+    NEW_PRODUCTS = [
+        ("OmieBox Pastel",                      "2025-08-01", "New product"),
+        ("Yumbox Tapas 5 Compartments (Large)", "2025-09-01", "New colors"),
+        ("Yumbox Tapas 4 Compartments (Large)", "2025-09-01", "New colors"),
+        ("MontiiCo 700ml Water Bottle",         "2025-10-01", "New colors"),
+        ("MontiiCo 475ml Water Bottle",         "2025-10-01", "New colors"),
+        ("MontiiCo 350ml Water Bottle",         "2025-10-01", "New colors"),
+        ("MontiiCo Feast Lunchbox",             "2025-12-01", "New product"),
+        ("MontiiCo Mini Food Jar",              "2025-12-01", "New product"),
+        ("MontiiCo Food Jar 400ml",             "2025-12-01", "New product"),
+    ]
+
     DATA_END = pd.Timestamp("2025-12-31")
 
-    # ── Build performance table ──
+    # Catalog-wide ranking over the same Aug-Dec window
+    window_start = pd.Timestamp("2025-08-01")
+    catalog_units = raw[raw["day"] >= window_start].groupby("product_title")["orders"].sum()
+    catalog_rank  = catalog_units.rank(ascending=False, method="min")
+    total_products = len(catalog_rank)
+
+    # Build performance table
     rows = []
-    for _, prod_row in inv_summary.iterrows():
-        product = prod_row["product_title"]
-        intro_date = prod_row["intro_date"]
-        total_ordered = prod_row["total_stock_ordered"]
-
-        # Only count sales from intro date onwards
-        psales = raw_sales[
-            (raw_sales["product_title"] == product) &
-            (raw_sales["day"] >= intro_date)
-        ]
-        units_sold = psales["orders"].sum()
-
-        # Months active: from intro to data end
-        months_active = max(1, round(
-            (DATA_END - intro_date).days / 30.44, 1
-        ))
-
-        sell_through = units_sold / total_ordered * 100 if total_ordered > 0 else 0
-        monthly_velocity = units_sold / months_active
-        remaining_stock = max(0, total_ordered - units_sold)
-        days_of_supply = (remaining_stock / monthly_velocity * 30) if monthly_velocity > 0 else 999
-
-        # Signal classification
-        if months_active <= 2 and sell_through >= 50:
-            signal = "Reorder Now"
-        elif sell_through >= 80:
-            signal = "Reorder Now"
-        elif sell_through >= 40:
-            signal = "Watch"
-        elif intro_date >= pd.Timestamp("2025-12-01"):
-            signal = "Too Early"
-        else:
-            signal = "Slow Mover"
-
+    for product, intro_str, ptype in NEW_PRODUCTS:
+        intro_dt = pd.Timestamp(intro_str)
+        psales = raw[(raw["product_title"] == product) & (raw["day"] >= intro_dt)]
+        units = int(psales["orders"].sum())
+        months_active = max(1, round((DATA_END - intro_dt).days / 30.44))
+        avg_mo = round(units / months_active, 1)
+        rank = int(catalog_rank.get(product, 0))
         rows.append({
             "Product": product,
-            "Introduced": intro_date.strftime("%b %Y"),
-            "Months Active": round(months_active, 1),
-            "Total Ordered": int(total_ordered),
-            "Units Sold": int(units_sold),
-            "Remaining Stock": int(remaining_stock),
-            "Sell-Through %": round(sell_through, 1),
-            "Units / Month": round(monthly_velocity, 1),
-            "Days of Supply": int(min(days_of_supply, 999)),
-            "Signal": signal,
+            "Type": ptype,
+            "Introduced": intro_dt.strftime("%b %Y"),
+            "Months Active": int(months_active),
+            "Total Units Sold": units,
+            "Avg Units / Month": avg_mo,
+            "Catalog Rank": f"{rank} of {total_products}" if rank > 0 else "No sales yet",
         })
 
-    perf_df = pd.DataFrame(rows).sort_values("Sell-Through %", ascending=False)
+    perf_df = pd.DataFrame(rows)
+    active_df = perf_df[perf_df["Total Units Sold"] > 0]
+    too_early = perf_df[perf_df["Total Units Sold"] == 0]
 
-    # ── KPI summary row ──
-    reorder_count = (perf_df["Signal"] == "Reorder Now").sum()
-    watch_count   = (perf_df["Signal"] == "Watch").sum()
-    slow_count    = (perf_df["Signal"] == "Slow Mover").sum()
-    total_units_sold = perf_df["Units Sold"].sum()
-
-    c1, c2, c3, c4 = st.columns(4)
-    with c1: st.metric("New Products Tracked", f"{len(perf_df)}")
-    with c2: st.metric("Reorder Signals", f"{reorder_count}", delta="products above threshold")
-    with c3: st.metric("Total Units Sold", f"{total_units_sold:,}")
-    with c4: st.metric("Slow Movers", f"{slow_count}")
+    # ── KPIs ──
+    c1, c2, c3 = st.columns(3)
+    with c1: st.metric("New Products / Colors Tracked", f"{len(perf_df)}")
+    with c2: st.metric("With Sales Data", f"{len(active_df)}")
+    with c3: st.metric("Total Units Sold (H2 2025)", f"{perf_df['Total Units Sold'].sum():,}")
 
     st.markdown("---")
 
-    # ── Sell-Through Bar Chart ──
-    st.markdown("### Sell-Through Rate by Product")
-    st.markdown("*Retail benchmark: 80% within first season (~3 months). Above 50% within 2 months = strong early signal.*")
+    # ── Velocity bar chart ──
+    st.markdown("### Average Monthly Sales Velocity")
+    st.markdown("*Units sold per month since introduction — comparable across products launched at different times*")
 
-    signal_colors = {
-        "Reorder Now": COLORS["primary"],
-        "Watch":       COLORS["warning"],
-        "Slow Mover":  COLORS["accent"],
-        "Too Early":   COLORS["class_c"],
-    }
-    bar_colors = [signal_colors[s] for s in perf_df["Signal"]]
+    vel_df = active_df.sort_values("Avg Units / Month", ascending=True)
+    bar_colors = [COLORS["primary"] if r.startswith("1 ") or int(r.split(" of ")[0]) <= 10
+                  else COLORS["secondary"] if int(r.split(" of ")[0]) <= 25
+                  else COLORS["class_c"]
+                  for r in vel_df["Catalog Rank"]]
 
     fig = go.Figure(go.Bar(
-        x=perf_df["Sell-Through %"],
-        y=perf_df["Product"],
+        x=vel_df["Avg Units / Month"],
+        y=vel_df["Product"],
         orientation="h",
         marker_color=bar_colors,
-        text=perf_df["Sell-Through %"].apply(lambda x: f"{x:.0f}%"),
+        text=vel_df["Avg Units / Month"].apply(lambda x: f"{x:.1f} units/mo"),
         textposition="outside",
-        customdata=perf_df[["Units Sold", "Total Ordered", "Signal"]].values,
-        hovertemplate="<b>%{y}</b><br>Sell-Through: %{x:.1f}%<br>Sold: %{customdata[0]} / %{customdata[1]} units<br>Signal: %{customdata[2]}<extra></extra>"
+        customdata=vel_df[["Catalog Rank", "Months Active", "Total Units Sold"]].values,
+        hovertemplate="<b>%{y}</b><br>%{x:.1f} units/month<br>Rank: %{customdata[0]}<br>Months active: %{customdata[1]}<br>Total sold: %{customdata[2]}<extra></extra>"
     ))
-    fig.add_vline(x=80, line_dash="dash", line_color=COLORS["primary"],
-                  annotation_text="80% benchmark", annotation_position="top right")
-    fig.add_vline(x=50, line_dash="dot", line_color=COLORS["warning"],
-                  annotation_text="50% early signal", annotation_position="top left")
     fig.update_layout(
-        height=max(300, len(perf_df) * 46 + 60),
-        margin=dict(l=10, r=80, t=40, b=10),
+        height=max(280, len(vel_df) * 52 + 60),
+        margin=dict(l=10, r=110, t=10, b=10),
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        xaxis=dict(title="Sell-Through Rate (%)", showgrid=True,
-                   gridcolor="rgba(42,157,143,0.1)", range=[0, max(perf_df["Sell-Through %"].max() * 1.2, 110)]),
-        yaxis=dict(autorange="reversed", showgrid=False),
+        xaxis=dict(title="Avg Units per Month", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+        yaxis=dict(showgrid=False),
         font=dict(family="Courier New, Courier, monospace")
     )
     st.plotly_chart(fig, use_container_width=True)
-
-    # ── Legend ──
-    leg_col1, leg_col2, leg_col3, leg_col4 = st.columns(4)
-    with leg_col1: st.markdown(f"<span style='color:{COLORS['primary']};font-weight:600;font-family:Courier New'>Reorder Now</span> — STR >= 80% or >= 50% within 2 months", unsafe_allow_html=True)
-    with leg_col2: st.markdown(f"<span style='color:{COLORS['warning']};font-weight:600;font-family:Courier New'>Watch</span> — STR 40–79%, monitor closely", unsafe_allow_html=True)
-    with leg_col3: st.markdown(f"<span style='color:{COLORS['accent']};font-weight:600;font-family:Courier New'>Slow Mover</span> — STR < 40% after sufficient time", unsafe_allow_html=True)
-    with leg_col4: st.markdown(f"<span style='color:{COLORS['class_c']};font-weight:600;font-family:Courier New'>Too Early</span> — Introduced Dec 2025, insufficient data", unsafe_allow_html=True)
+    st.caption("Color = catalog rank: teal = top 10, blue = top 25, grey = outside top 25. Rank is among all 97 products sold Aug–Dec 2025.")
 
     st.markdown("---")
 
-    # ── Monthly Velocity Chart ──
-    st.markdown("### Monthly Sales Velocity")
-    st.markdown("*Average units sold per month since introduction — comparable across products with different intro dates*")
+    # ── Monthly trend for selected product ──
+    st.markdown("### Month-by-Month Sales Trend")
 
-    vel_df = perf_df[perf_df["Signal"] != "Too Early"].sort_values("Units / Month", ascending=True)
-    fig2 = go.Figure(go.Bar(
-        x=vel_df["Units / Month"],
-        y=vel_df["Product"],
-        orientation="h",
-        marker_color=[signal_colors[s] for s in vel_df["Signal"]],
-        text=vel_df["Units / Month"].apply(lambda x: f"{x:.1f} units/mo"),
-        textposition="outside",
-        hovertemplate="<b>%{y}</b><br>%{x:.1f} units/month<extra></extra>"
-    ))
-    fig2.update_layout(
-        height=max(250, len(vel_df) * 46 + 60),
-        margin=dict(l=10, r=100, t=20, b=10),
-        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        xaxis=dict(title="Units per Month", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
-        yaxis=dict(autorange="reversed", showgrid=False),
-        font=dict(family="Courier New, Courier, monospace")
+    selected = st.selectbox(
+        "Select product",
+        options=active_df["Product"].tolist(),
+        index=0,
+        key="newprod_trend"
     )
-    st.plotly_chart(fig2, use_container_width=True)
 
-    st.markdown("---")
+    if selected:
+        intro_dt = pd.Timestamp(dict((p, d) for p, d, _ in NEW_PRODUCTS)[selected])
+        monthly = (
+            raw[(raw["product_title"] == selected) & (raw["day"] >= intro_dt)]
+            .assign(year_month=lambda x: x["day"].dt.to_period("M").dt.to_timestamp())
+            .groupby("year_month")["orders"].sum()
+            .reset_index()
+        )
+        monthly.columns = ["month", "units"]
 
-    # ── Monthly sales trend per product ──
-    st.markdown("### Monthly Sales Trend")
-    st.markdown("*Select a product to see its month-by-month sales trajectory since introduction*")
+        rank_val = int(catalog_rank.get(selected, 0))
+        avg_val = monthly["units"].mean()
 
-    trackable = perf_df[perf_df["Signal"] != "Too Early"]["Product"].tolist()
-    selected_new = st.selectbox("Select product", options=trackable, index=0, key="new_prod_select")
-
-    if selected_new:
-        intro_dt = inv_summary[inv_summary["product_title"] == selected_new]["intro_date"].values[0]
-        intro_dt = pd.Timestamp(intro_dt)
-        psales_monthly = raw_sales[
-            (raw_sales["product_title"] == selected_new) &
-            (raw_sales["day"] >= intro_dt)
-        ].copy()
-        psales_monthly["year_month"] = psales_monthly["day"].dt.to_period("M").dt.to_timestamp()
-        monthly_trend = psales_monthly.groupby("year_month").agg(
-            units=("orders", "sum")
-        ).reset_index()
-
-        if len(monthly_trend) > 0:
-            fig3 = go.Figure()
-            fig3.add_trace(go.Bar(
-                x=monthly_trend["year_month"], y=monthly_trend["units"],
+        col_a, col_b = st.columns([2, 1])
+        with col_a:
+            fig2 = go.Figure(go.Bar(
+                x=monthly["month"], y=monthly["units"],
                 marker_color=COLORS["primary"],
-                text=monthly_trend["units"].apply(lambda x: f"{x:.0f}"),
+                text=monthly["units"].apply(lambda x: str(int(x))),
                 textposition="outside",
-                hovertemplate="%{x|%b %Y}<br>Units: %{y}<extra></extra>"
+                hovertemplate="%{x|%b %Y}: %{y} units<extra></extra>"
             ))
-            # Add total stock line as reference
-            total_ord = int(inv_summary[inv_summary["product_title"] == selected_new]["total_stock_ordered"].values[0])
-            fig3.update_layout(
-                height=320, margin=dict(l=10, r=10, t=30, b=10),
+            fig2.add_hline(
+                y=avg_val, line_dash="dash", line_color=COLORS["secondary"],
+                annotation_text=f"Avg: {avg_val:.1f}/mo"
+            )
+            fig2.update_layout(
+                height=300, margin=dict(l=10, r=10, t=30, b=10),
                 paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                 xaxis=dict(showgrid=False),
-                yaxis=dict(title="Units Sold", showgrid=True,
-                           gridcolor="rgba(42,157,143,0.1)"),
+                yaxis=dict(title="Units Sold", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
                 font=dict(family="Courier New, Courier, monospace"),
-                title=f"{selected_new} — monthly sales since introduction"
+                title=selected
             )
-            st.plotly_chart(fig3, use_container_width=True)
-        else:
-            st.info("No monthly sales data found for this product yet.")
+            st.plotly_chart(fig2, use_container_width=True)
 
-    st.markdown("---")
+        with col_b:
+            st.markdown("<br>", unsafe_allow_html=True)
+            intro_label = pd.Timestamp(dict((p, d) for p, d, _ in NEW_PRODUCTS)[selected]).strftime("%b %Y")
+            ptype_label = dict((p, t) for p, _, t in NEW_PRODUCTS)[selected]
+            st.metric("Introduced", intro_label)
+            st.metric("Type", ptype_label)
+            st.metric("Avg / Month", f"{avg_val:.1f} units")
+            st.metric("Catalog Rank", f"{rank_val} of {total_products}" if rank_val > 0 else "—")
 
-    # ── Full data table ──
-    st.markdown("### Full Performance Table")
-    display_table = perf_df.copy()
-    display_table["Sell-Through %"] = display_table["Sell-Through %"].apply(lambda x: f"{x:.1f}%")
-    display_table["Units / Month"] = display_table["Units / Month"].apply(lambda x: f"{x:.1f}")
-    display_table["Days of Supply"] = display_table["Days of Supply"].apply(
-        lambda x: "999+" if x >= 999 else str(x)
-    )
-    st.dataframe(display_table, use_container_width=True, hide_index=True)
-    st.caption(
-        "Sell-Through Rate = units sold / total units ordered. "
-        "Days of Supply = remaining stock / monthly velocity x 30. "
-        "Signal thresholds: Reorder Now if STR >= 80%, or >= 50% within first 2 months."
-    )
+    # ── Dec arrivals note ──
+    if len(too_early) > 0:
+        st.markdown("---")
+        st.markdown("### Just Arrived — No Sales Data Yet")
+        st.markdown("*These products were introduced in December 2025. Check back after Q1 2026 for meaningful performance data.*")
+        for _, row in too_early.iterrows():
+            st.markdown(f"- **{row['Product']}** ({row['Type']}, introduced {row['Introduced']})")
+
 
 
 # ==============================================================================
