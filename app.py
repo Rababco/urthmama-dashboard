@@ -1278,6 +1278,15 @@ elif page == "Promotions":
 
     @st.cache_data
     def load_daily_sales(raw_path, _bust=""):
+        """
+        Builds daily sales with a SARIMAX-based expected daily revenue baseline.
+        Using the same SARIMAX(1,1,1)(0,1,1,12) + war dummies + maturity regressor
+        as the main pipeline ensures the baseline accounts for seasonality, trend,
+        and structural breaks — making lift comparisons defensible across all months.
+        A simple rolling average cannot separate seasonal peaks from genuine lift.
+        """
+        import warnings
+        warnings.filterwarnings("ignore")
         if raw_path is None or not os.path.exists(raw_path):
             return None
         df = pd.read_csv(raw_path)
@@ -1291,8 +1300,49 @@ elif page == "Promotions":
         full_idx = pd.date_range(daily["day"].min(), daily["day"].max(), freq="D")
         daily = daily.set_index("day").reindex(full_idx, fill_value=0).reset_index()
         daily.rename(columns={"index": "day"}, inplace=True)
-        # 28-day trailing median baseline (excludes current day)
-        daily["baseline"] = daily["revenue"].shift(1).rolling(28, min_periods=14).median()
+
+        # ── SARIMAX baseline ──
+        # Build monthly series and fit same model as pipeline
+        try:
+            from statsmodels.tsa.statespace.sarimax import SARIMAX
+            daily["ym"] = daily["day"].dt.to_period("M").dt.to_timestamp()
+            monthly_ts = daily.groupby("ym")["revenue"].sum()
+            monthly_ts.index = pd.DatetimeIndex(monthly_ts.index)
+            monthly_ts = monthly_ts.asfreq("MS")
+
+            # War imputation (same as pipeline)
+            WAR_MONTHS_PROMO = ["2024-10-01", "2024-11-01"]
+            for wm in WAR_MONTHS_PROMO:
+                wm_ts = pd.Timestamp(wm)
+                if wm_ts in monthly_ts.index:
+                    same = monthly_ts[
+                        (monthly_ts.index.month == wm_ts.month) &
+                        (monthly_ts.index != wm_ts)
+                    ]
+                    if len(same) > 0:
+                        monthly_ts[wm_ts] = same.mean()
+
+            exog_promo = pd.DataFrame(index=monthly_ts.index)
+            exog_promo["war_oct24"] = (monthly_ts.index == pd.Timestamp("2024-10-01")).astype(float)
+            exog_promo["war_nov24"] = (monthly_ts.index == pd.Timestamp("2024-11-01")).astype(float)
+            exog_promo["mature"]   = (monthly_ts.index >= pd.Timestamp("2023-07-01")).astype(float)
+
+            model_promo = SARIMAX(
+                monthly_ts, exog=exog_promo,
+                order=(1,1,1), seasonal_order=(0,1,1,12),
+                enforce_stationarity=False, enforce_invertibility=False
+            ).fit(disp=False, maxiter=500)
+
+            fitted = model_promo.fittedvalues.reset_index()
+            fitted.columns = ["ym", "expected_monthly"]
+            fitted["days_in_month"] = fitted["ym"].dt.daysinmonth
+            fitted["expected_daily"] = fitted["expected_monthly"] / fitted["days_in_month"]
+            daily = daily.merge(fitted[["ym", "expected_daily"]], on="ym", how="left")
+        except Exception:
+            # Fallback: 28-day rolling median if SARIMAX fails
+            daily["expected_daily"] = daily["revenue"].shift(1).rolling(28, min_periods=14).median()
+
+        daily["baseline"] = daily["expected_daily"]
         return daily
 
     daily_sales = load_daily_sales(PROMO_RAW_PATH, _bust=st.session_state.get("last_refresh", ""))
@@ -1475,7 +1525,7 @@ elif page == "Promotions":
     # ══════════════════════════════════════════════════════════
     with tab2:
         st.markdown("### Content Creation Impact")
-        st.markdown("*Does daily revenue increase in the 7 days following a content post, compared to the 28-day rolling baseline?*")
+        st.markdown("*Does daily revenue increase in the 7 days following a content post, compared to the SARIMAX seasonal expected value?*")
 
         with st.expander("Upload content creation dates (if not auto-detected)", expanded=False):
             cc_up = st.file_uploader("Content Creation Excel (.xlsx)", type="xlsx", key="cc_tab")
@@ -1533,7 +1583,7 @@ elif page == "Promotions":
                 with c4: st.metric("Mean Lift", f"{avg_lift:+.1f}%")
 
                 if median_lift > 5:
-                    st.success(f"Content posts tend to coincide with a **+{median_lift:.0f}% lift** in daily revenue vs. the 28-day baseline.")
+                    st.success(f"Content posts tend to coincide with a **+{median_lift:.0f}% lift** in daily revenue vs. the seasonal forecast baseline.")
                 elif median_lift < -5:
                     st.info("Content posts do not show a clear positive sales effect in the 7-day window. This could mean the effect is longer-term, or that posts tend to happen during quieter periods.")
                 else:
@@ -1552,7 +1602,7 @@ elif page == "Promotions":
                 ))
                 fig.add_trace(go.Scatter(
                     x=daily_sales["day"], y=daily_sales["baseline"],
-                    mode="lines", name="28-Day Baseline",
+                    mode="lines", name="SARIMAX Expected",
                     line=dict(color=COLORS["class_c"], width=1.5, dash="dot")
                 ))
                 # Post markers
@@ -1598,14 +1648,14 @@ elif page == "Promotions":
                     font=dict(family="Courier New, Courier, monospace")
                 )
                 st.plotly_chart(fig2, use_container_width=True)
-                st.caption("Each bar = one content post. Teal = sales above baseline in next 7 days. Orange = below baseline.")
+                st.caption("Each bar = one content post. Teal = revenue above SARIMAX seasonal expected in next 7 days. Orange = below expected.")
 
     # ══════════════════════════════════════════════════════════
     # TAB 3: INFLUENCER SHARES
     # ══════════════════════════════════════════════════════════
     with tab3:
         st.markdown("### Influencer Story Shares Impact")
-        st.markdown("*Does daily revenue increase in the 7 days following an influencer share, compared to the 28-day rolling baseline?*")
+        st.markdown("*Does daily revenue increase in the 7 days following an influencer share, compared to the SARIMAX seasonal expected value?*")
 
         with st.expander("Upload influencer shares file (if not auto-detected)", expanded=False):
             igs_up = st.file_uploader("Instagram Shares Excel (.xlsx)", type="xlsx", key="igs_tab")
@@ -1674,7 +1724,7 @@ elif page == "Promotions":
                 with c4: st.metric("Median Lift (7-day avg)", f"{median_ig:+.1f}%")
 
                 if median_ig > 5:
-                    st.success(f"Influencer shares tend to coincide with a **+{median_ig:.0f}% lift** in daily revenue vs. the 28-day baseline.")
+                    st.success(f"Influencer shares tend to coincide with a **+{median_ig:.0f}% lift** in daily revenue vs. the seasonal forecast baseline.")
                 elif median_ig < -5:
                     st.info("Influencer shares don't show a clear short-term sales effect. The impact may be longer-term or brand-awareness oriented.")
                 else:
@@ -1692,7 +1742,7 @@ elif page == "Promotions":
                 ))
                 fig.add_trace(go.Scatter(
                     x=daily_sales["day"], y=daily_sales["baseline"],
-                    mode="lines", name="28-Day Baseline",
+                    mode="lines", name="SARIMAX Expected",
                     line=dict(color=COLORS["class_c"], width=1.5, dash="dot")
                 ))
                 share_sales = []
