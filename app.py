@@ -1080,6 +1080,7 @@ elif page == "Inventory by Product":
 
 
 
+
 # ==============================================================================
 # PAGE: NEW PRODUCTS
 # ==============================================================================
@@ -1103,47 +1104,84 @@ elif page == "New Products":
         st.warning("Sales CSV not found.")
         st.stop()
 
+    WHOLESALE_NP = ["safa awad","wholesale ambefrul","ambefrul","samira",
+        "rasha yassine","fatima fadel","imad play one","wholesale trendy kids","trendy kids"]
+
     @st.cache_data
-    def load_new_prod_perf(raw_path, _bust=""):
+    def load_new_prod_full(raw_path, _bust=""):
         df = pd.read_csv(raw_path)
         df.columns = df.columns.str.strip().str.lower().str.replace(" ", "_", regex=False)
         df["day"] = pd.to_datetime(df["day"], errors="coerce")
         df["orders"] = pd.to_numeric(df.get("orders", df.get("net_items_sold", 0)), errors="coerce").fillna(0)
+        df["_cust"] = df.get("customer_name", pd.Series([""] * len(df))).fillna("").str.strip().str.lower()
+        df = df[~df["_cust"].apply(lambda c: any(w in c for w in WHOLESALE_NP))]
         df = df[df["product_title"].notna() & (df["orders"] > 0)]
+        df["month"] = df["day"].dt.month
+        df["year"]  = df["day"].dt.year
         return df
 
-    raw = load_new_prod_perf(NEW_PROD_RAW, _bust=st.session_state.get("last_refresh", ""))
+    raw = load_new_prod_full(NEW_PROD_RAW, _bust=st.session_state.get("last_refresh", ""))
 
-    # Newly introduced products with their intro dates
     NEW_PRODUCTS = [
-        ("OmieBox Pastel",                      "2025-08-01", "New product"),
-        ("Yumbox Tapas 5 Compartments (Large)", "2025-09-01", "New colors"),
-        ("Yumbox Tapas 4 Compartments (Large)", "2025-09-01", "New colors"),
-        ("MontiiCo 700ml Water Bottle",         "2025-10-01", "New colors"),
-        ("MontiiCo 475ml Water Bottle",         "2025-10-01", "New colors"),
-        ("MontiiCo 350ml Water Bottle",         "2025-10-01", "New colors"),
-        ("MontiiCo Feast Lunchbox",             "2025-12-01", "New product"),
-        ("MontiiCo Mini Food Jar",              "2025-12-01", "New product"),
-        ("MontiiCo Food Jar 400ml",             "2025-12-01", "New product"),
+        ("OmieBox Pastel",                      "2025-08-01", "New product",  [8,9,10,11,12]),
+        ("Yumbox Tapas 5 Compartments (Large)", "2025-09-01", "New colors",   [9,10,11,12]),
+        ("Yumbox Tapas 4 Compartments (Large)", "2025-09-01", "New colors",   [9,10,11,12]),
+        ("MontiiCo 700ml Water Bottle",         "2025-10-01", "New colors",   [10,11,12]),
+        ("MontiiCo 475ml Water Bottle",         "2025-10-01", "New colors",   [10,11,12]),
+        ("MontiiCo 350ml Water Bottle",         "2025-10-01", "New colors",   [10,11,12]),
+        ("MontiiCo Feast Lunchbox",             "2025-12-01", "New product",  []),
+        ("MontiiCo Mini Food Jar",              "2025-12-01", "New product",  []),
+        ("MontiiCo Food Jar 400ml",             "2025-12-01", "New product",  []),
     ]
 
     DATA_END = pd.Timestamp("2025-12-31")
+    MONTH_NAMES = {1:'Jan',2:'Feb',3:'Mar',4:'Apr',5:'May',6:'Jun',
+                   7:'Jul',8:'Aug',9:'Sep',10:'Oct',11:'Nov',12:'Dec'}
 
-    # Catalog-wide ranking over the same Aug-Dec window
-    window_start = pd.Timestamp("2025-08-01")
-    catalog_units = raw[raw["day"] >= window_start].groupby("product_title")["orders"].sum()
-    catalog_rank  = catalog_units.rank(ascending=False, method="min")
-    total_products = len(catalog_rank)
+    # ── Build historical catalog benchmark (2022-2024 only) ──
+    historical = raw[raw["year"] < 2025].copy()
+    hist_monthly = historical.groupby(
+        ["product_title","year","month"], as_index=False
+    )["orders"].sum()
+    hist_avg = hist_monthly.groupby(
+        ["product_title","month"], as_index=False
+    )["orders"].mean()
+    catalog_bench = hist_avg.groupby("month")["orders"].agg(
+        median="median", mean="mean", n_products="count"
+    ).reset_index()
+    bench_dict = {int(r["month"]): {"median": r["median"], "mean": r["mean"]}
+                  for _, r in catalog_bench.iterrows()}
 
-    # Build performance table
+    # ── Build performance summary ──
     rows = []
-    for product, intro_str, ptype in NEW_PRODUCTS:
+    for product, intro_str, ptype, months in NEW_PRODUCTS:
         intro_dt = pd.Timestamp(intro_str)
         psales = raw[(raw["product_title"] == product) & (raw["day"] >= intro_dt)]
         units = int(psales["orders"].sum())
         months_active = max(1, round((DATA_END - intro_dt).days / 30.44))
         avg_mo = round(units / months_active, 1)
-        rank = int(catalog_rank.get(product, 0))
+
+        # vs-benchmark: average of monthly lift across active months
+        lifts = []
+        for m in months:
+            ms = psales[psales["month"] == m]["orders"].sum()
+            if m in bench_dict and bench_dict[m]["median"] > 0:
+                lifts.append((ms - bench_dict[m]["median"]) / bench_dict[m]["median"] * 100)
+
+        avg_lift = round(np.mean(lifts), 0) if lifts else None
+
+        # Signal
+        if not months:
+            signal = "Too Early"
+        elif avg_lift is not None and avg_lift >= 200:
+            signal = "Strong"
+        elif avg_lift is not None and avg_lift >= 50:
+            signal = "Good"
+        elif avg_lift is not None and avg_lift >= 0:
+            signal = "Average"
+        else:
+            signal = "Weak"
+
         rows.append({
             "Product": product,
             "Type": ptype,
@@ -1151,12 +1189,14 @@ elif page == "New Products":
             "Months Active": int(months_active),
             "Total Units Sold": units,
             "Avg Units / Month": avg_mo,
-            "Catalog Rank": f"{rank} of {total_products}" if rank > 0 else "No sales yet",
+            "Avg Lift vs Benchmark": f"{avg_lift:+.0f}%" if avg_lift is not None else "—",
+            "_lift_val": avg_lift,
+            "Signal": signal,
         })
 
     perf_df = pd.DataFrame(rows)
-    active_df = perf_df[perf_df["Total Units Sold"] > 0]
-    too_early = perf_df[perf_df["Total Units Sold"] == 0]
+    active_df = perf_df[perf_df["Signal"] != "Too Early"]
+    too_early = perf_df[perf_df["Signal"] == "Too Early"]
 
     # ── KPIs ──
     c1, c2, c3 = st.columns(3)
@@ -1165,100 +1205,141 @@ elif page == "New Products":
     with c3: st.metric("Total Units Sold (H2 2025)", f"{perf_df['Total Units Sold'].sum():,}")
 
     st.markdown("---")
+    st.markdown("### How each product performed vs. the catalog historical benchmark")
+    st.markdown(
+        "*Benchmark = catalog-wide median units sold for that calendar month, averaged across 2022–2024. "
+        "A new product at +200% sold 3x more than a typical product historically sold in the same month.*"
+    )
 
-    # ── Velocity bar chart ──
-    st.markdown("### Average Monthly Sales Velocity")
-    st.markdown("*Units sold per month since introduction — comparable across products launched at different times*")
+    signal_colors = {
+        "Strong":  COLORS["primary"],
+        "Good":    COLORS["secondary"],
+        "Average": COLORS["warning"],
+        "Weak":    COLORS["accent"],
+        "Too Early": COLORS["class_c"],
+    }
 
-    vel_df = active_df.sort_values("Avg Units / Month", ascending=True)
-    bar_colors = [COLORS["primary"] if r.startswith("1 ") or int(r.split(" of ")[0]) <= 10
-                  else COLORS["secondary"] if int(r.split(" of ")[0]) <= 25
-                  else COLORS["class_c"]
-                  for r in vel_df["Catalog Rank"]]
+    # ── Lift bar chart ──
+    chart_df = active_df.sort_values("_lift_val", ascending=True)
+    bar_colors = [signal_colors[s] for s in chart_df["Signal"]]
 
     fig = go.Figure(go.Bar(
-        x=vel_df["Avg Units / Month"],
-        y=vel_df["Product"],
+        x=chart_df["_lift_val"],
+        y=chart_df["Product"],
         orientation="h",
         marker_color=bar_colors,
-        text=vel_df["Avg Units / Month"].apply(lambda x: f"{x:.1f} units/mo"),
+        text=chart_df["Avg Lift vs Benchmark"],
         textposition="outside",
-        customdata=vel_df[["Catalog Rank", "Months Active", "Total Units Sold"]].values,
-        hovertemplate="<b>%{y}</b><br>%{x:.1f} units/month<br>Rank: %{customdata[0]}<br>Months active: %{customdata[1]}<br>Total sold: %{customdata[2]}<extra></extra>"
+        customdata=chart_df[["Avg Units / Month","Months Active","Signal"]].values,
+        hovertemplate="<b>%{y}</b><br>Avg lift vs benchmark: %{x:+.0f}%<br>%{customdata[0]} units/month avg<br>%{customdata[1]} months active<br>Signal: %{customdata[2]}<extra></extra>"
     ))
+    fig.add_vline(x=0,   line_color="gray",         line_width=1)
+    fig.add_vline(x=200, line_dash="dash",
+                  line_color=COLORS["primary"],
+                  annotation_text="Strong (200%+)",
+                  annotation_position="top right")
+    fig.add_vline(x=50,  line_dash="dot",
+                  line_color=COLORS["secondary"],
+                  annotation_text="Good (50%+)",
+                  annotation_position="top right")
     fig.update_layout(
-        height=max(280, len(vel_df) * 52 + 60),
-        margin=dict(l=10, r=110, t=10, b=10),
+        height=max(280, len(chart_df) * 56 + 80),
+        margin=dict(l=10, r=120, t=50, b=10),
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-        xaxis=dict(title="Avg Units per Month", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+        xaxis=dict(title="Avg % above historical catalog median (same months)",
+                   showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
         yaxis=dict(showgrid=False),
         font=dict(family="Courier New, Courier, monospace")
     )
     st.plotly_chart(fig, use_container_width=True)
-    st.caption("Color = catalog rank: teal = top 10, blue = top 25, grey = outside top 25. Rank is among all 97 products sold Aug–Dec 2025.")
+
+    # ── Legend ──
+    lc1, lc2, lc3, lc4 = st.columns(4)
+    with lc1: st.markdown(f"<span style='color:{COLORS['primary']};font-family:Courier New;font-weight:600'>Strong</span> — 200%+ above benchmark", unsafe_allow_html=True)
+    with lc2: st.markdown(f"<span style='color:{COLORS['secondary']};font-family:Courier New;font-weight:600'>Good</span> — 50–200% above", unsafe_allow_html=True)
+    with lc3: st.markdown(f"<span style='color:{COLORS['warning']};font-family:Courier New;font-weight:600'>Average</span> — 0–50% above", unsafe_allow_html=True)
+    with lc4: st.markdown(f"<span style='color:{COLORS['accent']};font-family:Courier New;font-weight:600'>Weak</span> — below benchmark", unsafe_allow_html=True)
 
     st.markdown("---")
 
-    # ── Monthly trend for selected product ──
-    st.markdown("### Month-by-Month Sales Trend")
+    # ── Month-by-month detail for selected product ──
+    st.markdown("### Month-by-Month Detail")
+    st.markdown("*New product sales each month vs. what a typical catalog product sold in that same month historically*")
 
     selected = st.selectbox(
         "Select product",
         options=active_df["Product"].tolist(),
         index=0,
-        key="newprod_trend"
+        key="newprod_detail"
     )
 
     if selected:
-        intro_dt = pd.Timestamp(dict((p, d) for p, d, _ in NEW_PRODUCTS)[selected])
-        monthly = (
-            raw[(raw["product_title"] == selected) & (raw["day"] >= intro_dt)]
-            .assign(year_month=lambda x: x["day"].dt.to_period("M").dt.to_timestamp())
-            .groupby("year_month")["orders"].sum()
-            .reset_index()
-        )
-        monthly.columns = ["month", "units"]
+        prod_info = next((p for p in NEW_PRODUCTS if p[0] == selected), None)
+        intro_dt  = pd.Timestamp(prod_info[1])
+        months_to_show = prod_info[3]
 
-        rank_val = int(catalog_rank.get(selected, 0))
-        avg_val = monthly["units"].mean()
+        psales = raw[(raw["product_title"] == selected) & (raw["day"] >= intro_dt)]
+        monthly_new = psales.groupby("month")["orders"].sum().to_dict()
 
-        col_a, col_b = st.columns([2, 1])
-        with col_a:
-            fig2 = go.Figure(go.Bar(
-                x=monthly["month"], y=monthly["units"],
-                marker_color=COLORS["primary"],
-                text=monthly["units"].apply(lambda x: str(int(x))),
-                textposition="outside",
-                hovertemplate="%{x|%b %Y}: %{y} units<extra></extra>"
+        detail_rows = []
+        for m in months_to_show:
+            new_val  = monthly_new.get(m, 0)
+            bench_md = bench_dict.get(m, {}).get("median", 0)
+            bench_mn = bench_dict.get(m, {}).get("mean", 0)
+            lift_md  = (new_val - bench_md) / bench_md * 100 if bench_md > 0 else 0
+            detail_rows.append({
+                "Month": MONTH_NAMES[m] + " 2025",
+                "New Product (units)": int(new_val),
+                "Hist. Median (units)": round(bench_md, 1),
+                "Hist. Mean (units)":   round(bench_mn, 1),
+                "Lift vs Median":       f"{lift_md:+.0f}%",
+                "_lift": lift_md,
+                "_new": new_val,
+                "_bench": bench_md,
+            })
+
+        detail_df = pd.DataFrame(detail_rows)
+
+        col_chart, col_table = st.columns([3, 2])
+
+        with col_chart:
+            fig2 = go.Figure()
+            fig2.add_trace(go.Bar(
+                x=detail_df["Month"],
+                y=detail_df["New Product (units)"],
+                name="New Product",
+                marker_color=COLORS["primary"]
             ))
-            fig2.add_hline(
-                y=avg_val, line_dash="dash", line_color=COLORS["secondary"],
-                annotation_text=f"Avg: {avg_val:.1f}/mo"
-            )
+            fig2.add_trace(go.Scatter(
+                x=detail_df["Month"],
+                y=detail_df["Hist. Median (units)"],
+                name="Hist. Median",
+                mode="lines+markers",
+                line=dict(color=COLORS["accent"], width=2, dash="dash"),
+                marker=dict(size=7)
+            ))
             fig2.update_layout(
-                height=300, margin=dict(l=10, r=10, t=30, b=10),
+                height=320, margin=dict(l=10, r=10, t=30, b=10),
                 paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                 xaxis=dict(showgrid=False),
-                yaxis=dict(title="Units Sold", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
+                yaxis=dict(title="Units Sold", showgrid=True,
+                           gridcolor="rgba(42,157,143,0.1)"),
                 font=dict(family="Courier New, Courier, monospace"),
+                legend=dict(orientation="h", yanchor="bottom", y=1.02),
                 title=selected
             )
             st.plotly_chart(fig2, use_container_width=True)
 
-        with col_b:
+        with col_table:
             st.markdown("<br>", unsafe_allow_html=True)
-            intro_label = pd.Timestamp(dict((p, d) for p, d, _ in NEW_PRODUCTS)[selected]).strftime("%b %Y")
-            ptype_label = dict((p, t) for p, _, t in NEW_PRODUCTS)[selected]
-            st.metric("Introduced", intro_label)
-            st.metric("Type", ptype_label)
-            st.metric("Avg / Month", f"{avg_val:.1f} units")
-            st.metric("Catalog Rank", f"{rank_val} of {total_products}" if rank_val > 0 else "—")
+            disp = detail_df[["Month","New Product (units)","Hist. Median (units)","Lift vs Median"]].copy()
+            st.dataframe(disp, use_container_width=True, hide_index=True)
 
-    # ── Dec arrivals note ──
+    # ── Dec arrivals ──
     if len(too_early) > 0:
         st.markdown("---")
         st.markdown("### Just Arrived — No Sales Data Yet")
-        st.markdown("*These products were introduced in December 2025. Check back after Q1 2026 for meaningful performance data.*")
+        st.markdown("*Introduced December 2025. Check back after Q1 2026.*")
         for _, row in too_early.iterrows():
             st.markdown(f"- **{row['Product']}** ({row['Type']}, introduced {row['Introduced']})")
 
