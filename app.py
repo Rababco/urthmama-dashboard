@@ -459,6 +459,15 @@ if page == "Overview":
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("18-Month Forecast", f"${forecast_total:,.0f}", delta=None)
+        PRODUCT_COST_RATE = 0.387
+        SALARY_18M = 1200 * 18
+        SHIPPING_18M = 10000 * 1.5
+        RENT_18M = 1800 * 1.5
+        VIDEO_18M = 1000 * 1.5
+        est_expenses = (forecast_total * PRODUCT_COST_RATE) + SALARY_18M + SHIPPING_18M + RENT_18M + VIDEO_18M
+        est_profit = forecast_total - est_expenses
+        st.markdown(f"**Estimated Profit: ${est_profit:,.0f}**")
+        st.caption("Based on estimated product costs, salaries, shipping, rent, and video. Excludes taxes, packaging, returns, and import duties.")
     with col2:
         a_products = len(data['abc_class'][data['abc_class']['abc_class'] == 'A'])
         st.metric("Class A Products", f"{a_products}", delta=None)
@@ -723,6 +732,11 @@ elif page == "Sales Forecast":
             st.metric("Retail Forecast (18 mo)", f"${retail_total:,.0f}")
         else:
             st.metric("Total Forecast (18 mo)", f"${retail_total:,.0f}")
+        _fc_total = retail_total
+        _expenses = (_fc_total * 0.387) + (1200*18) + (10000*1.5) + (1800*1.5) + (1000*1.5)
+        _profit = _fc_total - _expenses
+        st.markdown(f"**Estimated Profit: ${_profit:,.0f}**")
+        st.caption("Based on estimated product costs, salaries, shipping, rent, and video. Excludes taxes, packaging, returns, and import duties.")
     with col2:
         if has_wholesale:
             st.metric("+ Wholesale Allowance", f"${wholesale_total:,.0f}")
@@ -1670,15 +1684,29 @@ elif page == "Promotions":
             else:
                 return None
             df.columns = df.columns.str.strip()
+            # Find date column — try known name first, then any column that parses as dates
             if "Sharing date" in df.columns:
                 df["date"] = pd.to_datetime(df["Sharing date"], errors="coerce")
             else:
-                df["date"] = pd.to_datetime(df.iloc[:, 1], errors="coerce")
+                # Try each column until one parses as dates
+                date_col = None
+                for col in df.columns:
+                    parsed = pd.to_datetime(df[col], errors="coerce")
+                    if parsed.notna().sum() > len(df) * 0.5:
+                        date_col = col
+                        break
+                if date_col:
+                    df["date"] = pd.to_datetime(df[date_col], errors="coerce")
+                else:
+                    return None
+            # Find influencer column
             if "User" in df.columns:
                 df["influencer"] = df["User"]
             else:
-                df["influencer"] = df.iloc[:, 0]
-            # Drop the one bad-year entry
+                # Use whichever column is not the date column
+                non_date_cols = [c for c in df.columns if c not in ["date", "Sharing date"]]
+                df["influencer"] = df[non_date_cols[0]] if non_date_cols else "Unknown"
+            # Drop bad-year entries
             df = df[df["date"].dt.year < 2100].dropna(subset=["date"])
             return df
 
