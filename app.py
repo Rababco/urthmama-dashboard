@@ -1879,59 +1879,6 @@ elif page == "Promotions":
 
                 st.markdown("---")
 
-                col_left, col_right = st.columns(2)
-
-                with col_left:
-                    st.markdown("#### Lift per Share Event")
-                    colors_ig = [COLORS["primary"] if v >= 0 else COLORS["accent"] for v in lift_ig["lift_pct"]]
-                    fig2 = go.Figure(go.Bar(
-                        x=lift_ig["date"], y=lift_ig["lift_pct"],
-                        marker_color=colors_ig,
-                        text=lift_ig["influencer"],
-                        hovertemplate="%{text}<br>%{x|%b %d %Y}<br>Lift: %{y:+.1f}%<extra></extra>"
-                    ))
-                    fig2.add_hline(y=0, line_color="gray", line_width=1)
-                    fig2.add_hline(y=median_ig, line_dash="dash",
-                                   line_color=COLORS["secondary"],
-                                   annotation_text=f"Median: {median_ig:+.1f}%")
-                    fig2.update_layout(
-                        height=320, margin=dict(l=10, r=10, t=30, b=10),
-                        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                        xaxis=dict(showgrid=False),
-                        yaxis=dict(title="Lift (%)", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
-                        font=dict(family="Courier New, Courier, monospace")
-                    )
-                    st.plotly_chart(fig2, use_container_width=True)
-
-                with col_right:
-                    st.markdown("#### Average Lift by Influencer")
-                    by_inf = lift_ig.groupby("influencer").agg(
-                        shares=("date", "count"),
-                        median_lift=("lift_pct", "median"),
-                        avg_lift=("lift_pct", "mean")
-                    ).reset_index().sort_values("median_lift", ascending=True)
-
-                    bar_colors = [COLORS["primary"] if v >= 0 else COLORS["accent"] for v in by_inf["median_lift"]]
-                    fig3 = go.Figure(go.Bar(
-                        x=by_inf["median_lift"],
-                        y=by_inf["influencer"],
-                        orientation="h",
-                        marker_color=bar_colors,
-                        text=by_inf.apply(lambda r: f"{r['shares']} share{'s' if r['shares']>1 else ''}", axis=1),
-                        textposition="outside",
-                        hovertemplate="%{y}<br>Median Lift: %{x:+.1f}%<extra></extra>"
-                    ))
-                    fig3.add_vline(x=0, line_color="gray", line_width=1)
-                    fig3.update_layout(
-                        height=320, margin=dict(l=10, r=60, t=10, b=10),
-                        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                        xaxis=dict(title="Median 7-Day Lift (%)", showgrid=True, gridcolor="rgba(42,157,143,0.1)"),
-                        yaxis=dict(showgrid=False),
-                        font=dict(family="Courier New, Courier, monospace")
-                    )
-                    st.plotly_chart(fig3, use_container_width=True)
-                    st.caption("Teal = positive lift | Orange = negative lift | Count = number of shares analysed")
-
 
 
 # ==============================================================================
